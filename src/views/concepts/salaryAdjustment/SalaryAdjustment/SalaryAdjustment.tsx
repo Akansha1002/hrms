@@ -1,8 +1,10 @@
-import React from 'react'
+import SalaryAdjustmentTable from "./components/SalaryAdjustmentTable"
 
 const SalaryAdjustment = () => {
   return (
-    <div>SalaryAdjustment</div>
+    <div>
+      <SalaryAdjustmentTable />
+    </div>
   )
 }
 
