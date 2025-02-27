@@ -148,6 +148,18 @@ const conceptsRoute: Routes = [
     },
 
     {
+        key: 'concepts.customers.drivingLicense',
+        path: `${CONCEPTS_PREFIX_PATH}/customers/driving-license`,
+        component: lazy(
+            () => import('@/views/concepts/customers/DrivingLicense'),
+        ),
+        authority: [ADMIN, USER],
+        meta: {
+            pageContainerType: 'contained',
+        },
+    },
+
+    {
         key: 'concepts.customers.employeeOnboarding',
         path: `${CONCEPTS_PREFIX_PATH}/customers/employee-onboarding`,
         component: lazy(

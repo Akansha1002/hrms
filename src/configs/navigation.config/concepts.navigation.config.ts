@@ -226,6 +226,23 @@ const conceptsNavigationConfig: NavigationTree[] = [
                         subMenu: [],
                     },
                     {
+                        key: 'concepts.customers.drivingLicense',
+                        path: `${CONCEPTS_PREFIX_PATH}/customers/driving-license`,
+                        title: 'Driving License',
+                        translateKey: 'nav.conceptsCustomers.drivingLicense',
+                        icon: 'customerList',
+                        type: NAV_ITEM_TYPE_ITEM,
+                        authority: [ADMIN, USER],
+                        meta: {
+                            description: {
+                                translateKey:
+                                    'nav.conceptsCustomers.drivingLicenseDesc',
+                                label: 'Driving License',
+                            },
+                        },
+                        subMenu: [],
+                    },
+                    {
                         key: 'concepts.customers.employeeOnboarding',
                         path: `${CONCEPTS_PREFIX_PATH}/customers/employee-onboarding`,
                         title: 'Employee Onboarding',
