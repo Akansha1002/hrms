@@ -259,6 +259,23 @@ const conceptsNavigationConfig: NavigationTree[] = [
                         },
                         subMenu: [],
                     },
+                    {
+                        key: 'concepts.customers.employeeMovement',
+                        path: `${CONCEPTS_PREFIX_PATH}/customers/employee-movement`,
+                        title: 'Employee Movement',
+                        translateKey: 'nav.conceptsCustomers.employeeMovement',
+                        icon: 'customerList',
+                        type: NAV_ITEM_TYPE_ITEM,
+                        authority: [ADMIN, USER],
+                        meta: {
+                            description: {
+                                translateKey:
+                                    'nav.conceptsCustomers.employeeMovementDesc',
+                                label: 'Employee Movement',
+                            },
+                        },
+                        subMenu: [],
+                    },
                 ],
             },
             //Leave

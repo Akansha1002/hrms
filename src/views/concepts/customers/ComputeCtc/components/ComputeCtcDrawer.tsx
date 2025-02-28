@@ -52,9 +52,10 @@ const ComputeCtcDrawer = ({ open, onDrawerOpen }: ComputeCtcDrawerProps) => {
     return (
         <Drawer
             title="Compute CTC"
-            width={1700}
+            width={1500}
             isOpen={open}
             onClose={handleDrawerClose}
+            onRequestClose={handleDrawerClose}
         >
             <Form
                 className="flex w-full h-full"

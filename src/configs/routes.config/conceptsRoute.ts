@@ -172,6 +172,22 @@ const conceptsRoute: Routes = [
     },
 
     {
+        key: 'concepts.customers.employeeMovement',
+        path: `${CONCEPTS_PREFIX_PATH}/customers/employee-movement`,
+        component: lazy(
+            () => import('@/views/concepts/customers/EmployeeMovement'),
+        ),
+        authority: [ADMIN, USER],
+        meta: {
+            header: {
+                title: 'Employee Movement',
+                contained: true,
+            },
+            footer: false,
+        },
+    },
+
+    {
         key: 'concepts.leave.leaveList',
         path: `${CONCEPTS_PREFIX_PATH}/leave/leave-list`,
         component: lazy(() => import('@/views/concepts/leave/LeaveList')),
