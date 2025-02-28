@@ -1,1 +1,0 @@
-import{j as s,w as a}from"./index-Ds58fsWd.js";const d=o=>{const{type:i="full",mode:m="light",className:t,imgClass:r,style:l,logoWidth:e="auto"}=o;return s.jsx("div",{className:a("logo",t),style:{...l,width:e},children:s.jsx("h3",{children:"HRMS"})})};export{d as L};
