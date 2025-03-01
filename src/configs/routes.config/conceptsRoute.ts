@@ -13,6 +13,16 @@ const conceptsRoute: Routes = [
     //     authority: [ADMIN, USER],
     // },
     {
+        key: 'concepts.dashboards',
+        path: `${CONCEPTS_PREFIX_PATH}/dashboards`,
+        component: lazy(() => import('@/views/concepts/dashboards/Dashboards')),
+        authority: [ADMIN, USER],
+        meta: {
+            pageContainerType: 'contained',
+            pageBackgroundType: 'plain',
+        },
+    },
+    {
         key: 'concepts.customers.customerEdit',
         path: `${CONCEPTS_PREFIX_PATH}/customers/customer-edit/:id`,
         component: lazy(
@@ -262,6 +272,24 @@ const conceptsRoute: Routes = [
         meta: {
             pageContainerType: 'contained',
             pageBackgroundType: 'plain',
+        },
+    },
+
+    {
+        key: 'concepts.confirmation.confirmationAppraisal',
+        path: `${CONCEPTS_PREFIX_PATH}/confirmation/confirmation-appraisal`,
+        component: lazy(
+            () => import('@/views/concepts/confirmation/ConfirmationAppraisal'),
+        ),
+        authority: [ADMIN, USER],
+        meta: {
+            header: {
+                title: '',
+                description:
+                    'Manage customer details, track purchases, and update preferences easily.',
+                contained: true,
+            },
+            footer: false,
         },
     },
 ]

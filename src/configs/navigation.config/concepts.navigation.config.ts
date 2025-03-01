@@ -24,6 +24,23 @@ const conceptsNavigationConfig: NavigationTree[] = [
         },
         subMenu: [
             {
+                key: 'concepts.dashboards',
+                path: `${CONCEPTS_PREFIX_PATH}/dashboards`,
+                title: 'Dashboards',
+                translateKey: 'nav.dashboards',
+                icon: 'dashboard',
+                type: NAV_ITEM_TYPE_ITEM,
+                authority: [ADMIN, USER],
+                meta: {
+                    description: {
+                        translateKey: 'nav.dashboardDesc',
+                        label: 'Schedule and events',
+                    },
+                },
+                subMenu: [],
+            },
+
+            {
                 key: 'concepts.customers',
                 path: '',
                 title: 'Employee',
@@ -394,6 +411,40 @@ const conceptsNavigationConfig: NavigationTree[] = [
                     },
                 },
                 subMenu: [],
+            },
+            {
+                key: 'concepts.confirmation',
+                path: '',
+                title: 'Confirmation',
+                translateKey: 'nav.conceptsConfirmation.confirmation',
+                icon: 'fileManager',
+                type: NAV_ITEM_TYPE_COLLAPSE,
+                authority: [ADMIN, USER],
+                meta: {
+                    description: {
+                        translateKey: 'nav.conceptsConfirmation.confirmationDesc',
+                        label: 'Employee Appraisal Confirmation',
+                    },
+                },
+                subMenu: [
+                    {
+                        key: 'concepts.confirmation.confirmationAppraisal',
+                        path: `${CONCEPTS_PREFIX_PATH}/confirmation/confirmation-appraisal`,
+                        title: 'Confirmation Appraisal',
+                        translateKey: 'nav.conceptsConfirmation.confirmationAppraisal',
+                        icon: 'confirmationAppraisal',
+                        type: NAV_ITEM_TYPE_ITEM,
+                        authority: [ADMIN, USER],
+                        meta: {
+                            description: {
+                                translateKey:
+                                    'nav.conceptsConfirmation.confirmationAppraisalDesc',
+                                label: '',
+                            },
+                        },
+                        subMenu: [],
+                    },
+                ],
             },
         ],
     },
