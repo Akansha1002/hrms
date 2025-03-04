@@ -55,23 +55,23 @@ const conceptsNavigationConfig: NavigationTree[] = [
                     },
                 },
                 subMenu: [
-                    // {
-                    //     key: 'concepts.customers.customerList',
-                    //     path: `${CONCEPTS_PREFIX_PATH}/customers/customer-list`,
-                    //     title: 'Employee List',
-                    //     translateKey: 'nav.conceptsCustomers.customerList',
-                    //     icon: 'customerList',
-                    //     type: NAV_ITEM_TYPE_ITEM,
-                    //     authority: [ADMIN, USER],
-                    //     meta: {
-                    //         description: {
-                    //             translateKey:
-                    //                 'nav.conceptsCustomers.customerListDesc',
-                    //             label: 'List of all customers',
-                    //         },
-                    //     },
-                    //     subMenu: [],
-                    // },
+                    {
+                        key: 'concepts.customers.employeeList',
+                        path: `${CONCEPTS_PREFIX_PATH}/customers/employee-list`,
+                        title: 'Employee List',
+                        translateKey: 'nav.conceptsCustomers.employeeList',
+                        icon: 'customerList',
+                        type: NAV_ITEM_TYPE_ITEM,
+                        authority: [ADMIN, USER],
+                        meta: {
+                            description: {
+                                translateKey:
+                                    'nav.conceptsCustomers.employeeListDesc',
+                                label: 'List of all employee',
+                            },
+                        },
+                        subMenu: [],
+                    },
                     // {
                     //     key: 'concepts.customers.customerEdit',
                     //     path: `${CONCEPTS_PREFIX_PATH}/customers/customer-edit/1`,
@@ -106,23 +106,23 @@ const conceptsNavigationConfig: NavigationTree[] = [
                         },
                         subMenu: [],
                     },
-                    // {
-                    //     key: 'concepts.customers.customerDetails',
-                    //     path: `${CONCEPTS_PREFIX_PATH}/customers/customer-details/1`,
-                    //     title: 'Customer Details',
-                    //     translateKey: 'nav.conceptsCustomers.customerDetails',
-                    //     icon: 'customerDetails',
-                    //     type: NAV_ITEM_TYPE_ITEM,
-                    //     authority: [ADMIN, USER],
-                    //     meta: {
-                    //         description: {
-                    //             translateKey:
-                    //                 'nav.conceptsCustomers.customerDetailsDesc',
-                    //             label: 'Detailed customer info',
-                    //         },
-                    //     },
-                    //     subMenu: [],
-                    // },
+                    {
+                        key: 'concepts.customers.details',
+                        path: `${CONCEPTS_PREFIX_PATH}/customers/details/HR-EMP-00001`,
+                        title: 'E-Details',
+                        translateKey: 'nav.conceptsCustomers.details',
+                        icon: 'customerDetails',
+                        type: NAV_ITEM_TYPE_ITEM,
+                        authority: [ADMIN, USER],
+                        meta: {
+                            description: {
+                                translateKey:
+                                    'nav.conceptsCustomers.customerDetailsDesc',
+                                label: 'Detailed customer info',
+                            },
+                        },
+                        subMenu: [],
+                    },
                     {
                         key: 'concepts.customers.contactDetails',
                         path: `${CONCEPTS_PREFIX_PATH}/customers/contact-details`,

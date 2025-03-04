@@ -1,6 +1,6 @@
 import type { Control, FieldErrors } from 'react-hook-form'
 
-export type OverviewFields = {
+export type PersonalInfoFields = {
     employeeNumber: string
     loginId: string
     salutation: Array<{ value: string; label: string }>
@@ -9,14 +9,9 @@ export type OverviewFields = {
     lastName: string
     gender: Array<{ value: string; label: string }>
     dateOfBirth: string
-
-    email: string
-    dialCode: string
-    phoneNumber: string
-    img: string
 }
 
-export type AddressFields = {
+export type OrganizationFields = {
     dateOfJoin: string
     effectiveFrom: string
     position: string
@@ -77,25 +72,13 @@ export type PayRollfields = {
     payGroup: string
 }
 
-
-export type TagsFields = {
-    tags: Array<{ value: string; label: string }>
-}
-
-export type AccountField = {
-    banAccount?: boolean
-    accountVerified?: boolean
-}
-
-export type CustomerFormSchema = OverviewFields &
-    AddressFields &
+export type EmployeeFormSchema = PersonalInfoFields &
+    OrganizationFields &
     ProfileImageFields &
     AdditionalInformationFields &
-    PayRollfields &
-    TagsFields &
-    AccountField
+    PayRollfields
 
 export type FormSectionBaseProps = {
-    control: Control<CustomerFormSchema>
-    errors: FieldErrors<CustomerFormSchema>
+    control: Control<EmployeeFormSchema>
+    errors: FieldErrors<EmployeeFormSchema>
 }

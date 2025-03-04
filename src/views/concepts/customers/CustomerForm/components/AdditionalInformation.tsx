@@ -3,8 +3,8 @@ import Input from '@/components/ui/Input'
 import Switcher from '@/components/ui/Switcher'
 import { FormItem } from '@/components/ui/Form'
 import { Controller } from 'react-hook-form'
-import type { FormSectionBaseProps } from './types'
 import { Select } from '@/components/ui/Select'
+import { FormSectionBaseProps } from '../types'
 
 type AdditionalInformationProps = FormSectionBaseProps
 

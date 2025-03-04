@@ -4,14 +4,6 @@ import { ADMIN, USER } from '@/constants/roles.constant'
 import type { Routes } from '@/@types/routes'
 
 const conceptsRoute: Routes = [
-    // {
-    //     key: 'concepts.customers.customerList',
-    //     path: `${CONCEPTS_PREFIX_PATH}/customers/customer-list`,
-    //     component: lazy(
-    //         () => import('@/views/concepts/customers/CustomerList'),
-    //     ),
-    //     authority: [ADMIN, USER],
-    // },
     {
         key: 'concepts.dashboards',
         path: `${CONCEPTS_PREFIX_PATH}/dashboards`,
@@ -21,6 +13,14 @@ const conceptsRoute: Routes = [
             pageContainerType: 'contained',
             pageBackgroundType: 'plain',
         },
+    },
+    {
+        key: 'concepts.customers.employeeList',
+        path: `${CONCEPTS_PREFIX_PATH}/customers/employee-list`,
+        component: lazy(
+            () => import('@/views/concepts/customers/EmployeeList'),
+        ),
+        authority: [ADMIN, USER],
     },
     {
         key: 'concepts.customers.customerEdit',
@@ -56,17 +56,17 @@ const conceptsRoute: Routes = [
             footer: false,
         },
     },
-    // {
-    //     key: 'concepts.customers.customerDetails',
-    //     path: `${CONCEPTS_PREFIX_PATH}/customers/customer-details/:id`,
-    //     component: lazy(
-    //         () => import('@/views/concepts/customers/CustomerDetails'),
-    //     ),
-    //     authority: [ADMIN, USER],
-    //     meta: {
-    //         pageContainerType: 'contained',
-    //     },
-    // },
+    {
+        key: 'concepts.customers.details',
+        path: `${CONCEPTS_PREFIX_PATH}/customers/details/:name`,
+        component: lazy(
+            () => import('@/views/concepts/customers/Details'),
+        ),
+        authority: [ADMIN, USER],
+        meta: {
+            pageContainerType: 'contained',
+        },
+    },
 
     {
         key: 'concepts.customers.contactDetails',

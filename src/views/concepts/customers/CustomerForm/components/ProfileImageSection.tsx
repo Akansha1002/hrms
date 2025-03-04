@@ -5,11 +5,11 @@ import { Button } from '@/components/ui'
 import DoubleSidedImage from '@/components/shared/DoubleSidedImage'
 import { Controller } from 'react-hook-form'
 import { HiOutlineUser } from 'react-icons/hi'
-import type { FormSectionBaseProps } from './types'
+import type { FormSectionBaseProps } from '../types'
 
 type ProfileImageSectionProps = FormSectionBaseProps
 
-const ProfileImage = ({ control }: ProfileImageSectionProps) => {
+const ProfileImageSection = ({ control }: ProfileImageSectionProps) => {
     const beforeUpload = (files: FileList | null) => {
         let valid: string | boolean = true
 
@@ -80,4 +80,4 @@ const ProfileImage = ({ control }: ProfileImageSectionProps) => {
     )
 }
 
-export default ProfileImage
+export default ProfileImageSection

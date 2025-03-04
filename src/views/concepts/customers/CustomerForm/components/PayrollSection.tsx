@@ -3,16 +3,16 @@ import Input from '@/components/ui/Input'
 import Switcher from '@/components/ui/Switcher'
 import { FormItem } from '@/components/ui/Form'
 import { Controller } from 'react-hook-form'
-import type { FormSectionBaseProps } from './types'
 import { Button } from '@/components/ui/Button'
 import { useNavigate } from "react-router-dom"
 import { useState } from 'react'
-import ComputeCtcDrawer from '../ComputeCtc/components/ComputeCtcDrawer'
+import { FormSectionBaseProps } from '../types'
+import ComputeCtcDrawer from '../../ComputeCtc/components/ComputeCtcDrawer'
 
 type PayRollProps = FormSectionBaseProps
 
 
-const PayRoll = ({ control, errors }: PayRollProps) => {
+const PayRollSection = ({ control, errors }: PayRollProps) => {
     const [drawerOpen, setDrawerOpen] = useState(false)
 
     const handleOnClick = () => {
@@ -162,4 +162,4 @@ const PayRoll = ({ control, errors }: PayRollProps) => {
     )
 }
 
-export default PayRoll
+export default PayRollSection

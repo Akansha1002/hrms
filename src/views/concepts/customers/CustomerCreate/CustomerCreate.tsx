@@ -8,7 +8,7 @@ import ConfirmDialog from '@/components/shared/ConfirmDialog'
 import sleep from '@/utils/sleep'
 import { TbTrash } from 'react-icons/tb'
 import { useNavigate } from 'react-router-dom'
-import type { CustomerFormSchema } from '../CustomerForm'
+import type { EmployeeFormSchema } from '../CustomerForm'
 
 const CustomerEdit = () => {
     const navigate = useNavigate()
@@ -17,7 +17,7 @@ const CustomerEdit = () => {
         useState(false)
     const [isSubmiting, setIsSubmiting] = useState(false)
 
-    const handleFormSubmit = async (values: CustomerFormSchema) => {
+    const handleFormSubmit = async (values: EmployeeFormSchema) => {
         console.log('Submitted values', values)
         setIsSubmiting(true)
         await sleep(800)
@@ -26,16 +26,16 @@ const CustomerEdit = () => {
             <Notification type="success">Customer created!</Notification>,
             { placement: 'top-center' },
         )
-        navigate('/concepts/customers/customer-list')
+        navigate('/concepts/customers/employee-list')
     }
 
     const handleConfirmDiscard = () => {
         setDiscardConfirmationOpen(true)
         toast.push(
-            <Notification type="success">Customer discardd!</Notification>,
+            <Notification type="success">Employee discardd!</Notification>,
             { placement: 'top-center' },
         )
-        navigate('/concepts/customers/customer-list')
+        navigate('/concepts/customers/employee-list')
     }
 
     const handleDiscard = () => {
@@ -49,7 +49,7 @@ const CustomerEdit = () => {
     return (
         <>
             <CustomerForm
-                newCustomer
+                newEmployee
                 defaultValues={{
                     employeeNumber: '',
                     loginId: '',
@@ -60,10 +60,10 @@ const CustomerEdit = () => {
                     dateOfBirth: '',
                     gender: [],
 
-                    email: '',
+                    // email: '',
                     img: '',
-                    phoneNumber: '',
-                    dialCode: '',
+                    // phoneNumber: '',
+                    // dialCode: '',
 
                     dateOfJoin: '',
                     effectiveFrom: '',
@@ -110,7 +110,6 @@ const CustomerEdit = () => {
                     address: '',
                     city: '',
                     postcode: '',
-                    tags: [],
                 }}
                 onFormSubmit={handleFormSubmit}
             >
