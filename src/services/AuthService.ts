@@ -11,7 +11,8 @@ import type {
 
 export async function apiSignIn(data: SignInCredential) {
     return ApiService.fetchDataWithAxios<SignInResponse>({
-        url: endpointConfig.signIn,
+        // url: endpointConfig.signIn,
+        url: "http://159.65.147.182:8000/api/method/login",
         method: 'post',
         data,
     })
