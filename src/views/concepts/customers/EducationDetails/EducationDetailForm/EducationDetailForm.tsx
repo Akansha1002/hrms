@@ -9,42 +9,42 @@ import { z } from 'zod'
 import type { ZodType } from 'zod'
 import type { CommonProps } from '@/@types/common'
 import { EducationDetailsSchema } from './types'
-import FormSection from './FormSection'
+import FormSection from './components/FormSection'
 
 type EducationDetailsProps = {
     onFormSubmit: (values: EducationDetailsSchema) => void
     defaultValues?: EducationDetailsSchema
-    newCustomer?: boolean
 } & CommonProps
 
 const validationSchema: ZodType<EducationDetailsSchema> = z.object({
-    email: z
-        .string()
-        .min(1, { message: 'Email required' })
-        .email({ message: 'Invalid email' }),
-    dialCode: z.string().min(1, { message: 'Please select your country code' }),
-    phoneNumber: z
-        .string()
-        .min(1, { message: 'Please input your mobile number' }),
+    type_of_establishment: z.string().optional(),
+    name_of_establishment: z.string().optional(),
+    discipline: z.string().optional(),
+    passing_year: z.string().optional(),
+    grade: z.string().optional(),
+    level: z.string().optional(),
 
-    dateOfJoin: z.string().min(1, { message: 'Date of join required' }),
-    effectiveFrom: z.string().min(1, { message: 'Effective from required' }),
-    position: z.string().min(1, { message: 'Position required' }),
-    orgStructure: z.string().min(1, { message: 'Organization structure required' }),
+    company_sponsored: z.string().optional(),
+    amount: z.string().optional(),
+    reimbursement_data: z.string().optional(),
 
-    country: z.string().min(1, { message: 'Please select a country' }),
-    address: z.string().min(1, { message: 'Addrress required' }),
-    postcode: z.string().min(1, { message: 'Postcode required' }),
-    city: z.string().min(1, { message: 'City required' }),
-    img: z.string(),
-    tags: z.array(z.object({ value: z.string(), label: z.string() })),
+    subject: z.string().optional(),
+    major_field: z.string().optional(),
+    minor_field: z.string().optional(),
+    affiliated_to: z.string().optional(),
+
+    address_of_institute: z.string().optional(),
+    attended_from: z.string().optional(),
+    attended_to: z.string().optional(),
+    currency: z.string().optional(),
+    explain_breaks_during_education: z.string().optional(),
+    employee_number: z.string().optional(),
 })
 
-const EducationDetails = (props: EducationDetailsProps) => {
+const EducationDetailForm = (props: EducationDetailsProps) => {
     const {
         onFormSubmit,
         defaultValues = {},
-        newCustomer = false,
         children,
     } = props
 
@@ -54,13 +54,7 @@ const EducationDetails = (props: EducationDetailsProps) => {
         formState: { errors },
         control,
     } = useForm<EducationDetailsSchema>({
-        defaultValues: {
-            ...{
-                banAccount: false,
-                accountVerified: true,
-            },
-            ...defaultValues,
-        },
+        defaultValues,
         resolver: zodResolver(validationSchema),
     })
 
@@ -75,16 +69,17 @@ const EducationDetails = (props: EducationDetailsProps) => {
         onFormSubmit?.(values)
     }
 
-
     return (
         <Form
+            id='educationDetailForm'
             className="flex w-full h-full"
             containerClassName="flex flex-col w-full justify-between"
+            onSubmit={handleSubmit(onSubmit)}
         >
             <Container>
                 <div className="flex items-center justify-between">
                     <div className="gap-4 flex flex-col flex-auto">
-                        <FormSection control={control} errors={errors} />
+                        <FormSection control={control} errors={errors} data={defaultValues}/>
                     </div>
                 </div>
             </Container>
@@ -93,4 +88,4 @@ const EducationDetails = (props: EducationDetailsProps) => {
     )
 }
 
-export default EducationDetails   
+export default EducationDetailForm   

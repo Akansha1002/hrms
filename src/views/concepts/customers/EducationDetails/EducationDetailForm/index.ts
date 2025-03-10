@@ -1,5 +1,5 @@
-import EducationDetails from './EducationDetails';
+import EducationDetailForm from './EducationDetailForm';
 import type { EducationDetailsSchema } from './types';
 
 export type { EducationDetailsSchema };
-export default EducationDetails;
+export default EducationDetailForm;
