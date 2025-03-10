@@ -1,84 +1,151 @@
-import { useEffect } from 'react'
-import { Form } from '@/components/ui/Form'
+import { useState } from 'react'
 import Container from '@/components/shared/Container'
-import BottomStickyBar from '@/components/template/BottomStickyBar'
-import isEmpty from 'lodash/isEmpty'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
-import type { ZodType } from 'zod'
-import type { CommonProps } from '@/@types/common'
-import { DrivingLicenseSchema } from './types'
-import DrivingLicenseDetails from './DrivingLicenseDetails'
+import Button from '@/components/ui/Button'
+import Notification from '@/components/ui/Notification'
+import toast from '@/components/ui/toast'
+import ConfirmDialog from '@/components/shared/ConfirmDialog'
+import { TbArrowNarrowLeft, TbTrash } from 'react-icons/tb'
+import { useNavigate, useParams } from 'react-router-dom'
+import useSWR from 'swr'
+import DrivingLicenseEdit from './DrivingLicenseCreate'
+import { apiCreateDrivingLicense, apiGetDrivingLicense, apiUpdateDrivingLicense } from '@/services/DrivingLicense'
+import { DrivingLicenseSchema, GetDrivingLicenseResponse } from './types'
 
-type DrivingLicenseProps = {
-    onFormSubmit: (values: DrivingLicenseSchema) => void
-    defaultValues?: DrivingLicenseSchema
-    newCustomer?: boolean
-} & CommonProps
+const DrivingLicense = () => {
+    const navigate = useNavigate()
+    const { name } = useParams()
 
-const validationSchema: ZodType<DrivingLicenseSchema> = z.object({
-    phoneNumber: z
-        .string()
-        .min(1, { message: 'Please input your mobile number' }),
+    const [discardConfirmationOpen, setDiscardConfirmationOpen] = useState(false)
+    const [isSubmiting, setIsSubmiting] = useState(false)
 
-    dateOfJoin: z.string().min(1, { message: 'Date of join required' }),
-
-    country: z.string().min(1, { message: 'Please select a country' }),
-    address: z.string().min(1, { message: 'Addrress required' }),
-    postcode: z.string().min(1, { message: 'Postcode required' }),
-    city: z.string().min(1, { message: 'City required' }),
-    img: z.string(),
-    tags: z.array(z.object({ value: z.string(), label: z.string() })),
-})
-const DrivingLicense = (props: DrivingLicenseProps) => {
-    const {
-        onFormSubmit,
-        defaultValues = {},
-        newCustomer = false,
-        children,
-    } = props
-
-    const {
-        handleSubmit,
-        reset,
-        formState: { errors },
-        control,
-    } = useForm<DrivingLicenseSchema>({
-        defaultValues: {
-            ...{
-                banAccount: false,
-                accountVerified: true,
-            },
-            ...defaultValues,
+    const { data, isLoading, mutate } = useSWR(
+        name ? ['/api/resource/DrivingLicense', { name }] : null,
+        ([_, params]) => apiGetDrivingLicense<GetDrivingLicenseResponse, { name: string }>(params),
+        {
+            revalidateOnFocus: false,
+            revalidateIfStale: false,
         },
-        resolver: zodResolver(validationSchema),
-    })
+    )
 
-    useEffect(() => {
-        if (!isEmpty(defaultValues)) {
-            reset(defaultValues)
+    const drivingLicenseData = data?.data
+
+    const handleFormSubmit = async (values: DrivingLicenseSchema) => {
+        if (isSubmiting) return;
+        setIsSubmiting(true)
+        // await sleep(800)
+        try {
+            if (name) {
+                await apiUpdateDrivingLicense(name, values)
+                toast.push(
+                    <Notification type="success">Driving License updated successfully!</Notification>,
+                    { placement: 'top-center' },
+                )
+            } else {
+                const response = await apiCreateDrivingLicense(values)
+                toast.push(<Notification type="success">Driving License created successfully!</Notification>, {
+                    placement: 'top-center',
+                })
+                navigate('/employee-onboarding')
+            }
+            await mutate()
+        } catch (error) {
+            console.error('Error saving driving license:', error)
+            toast.push(
+                <Notification type="danger">Failed to save driving license!</Notification>,
+                { placement: 'top-center' },
+            )
+        } finally {
+
+            setIsSubmiting(false)
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [JSON.stringify(defaultValues)])
-
-    const onSubmit = (values: DrivingLicenseSchema) => {
-        onFormSubmit?.(values)
     }
+
+    const handleConfirmDiscard = () => {
+        setDiscardConfirmationOpen(true)
+        toast.push(
+            <Notification type="success">Driving License discard!</Notification>,
+            { placement: 'top-center' },
+        )
+        navigate('/employee-onboarding')
+    }
+
+    const handleDiscard = () => {
+        setDiscardConfirmationOpen(true)
+    }
+
+    const handleCancel = () => {
+        setDiscardConfirmationOpen(false)
+    }
+
+    const handleBack = () => {
+        history.back()
+    }
+
+    // const handleSubmitClick = () => {
+    //     if (!isSubmiting && formRef.current) {
+    //         setIsSubmiting(true); // Prevent double submission
+    //         formRef.current.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }));
+    //     }
+    // };
+
     return (
-        <Form
-            className="flex w-full h-full"
-            containerClassName="flex flex-col w-full justify-between"
-        >
-            <Container>
-                <div className="flex items-center justify-between">
-                    <div className="gap-4 flex flex-col flex-auto">
-                        <DrivingLicenseDetails control={control} errors={errors} />
+        <>
+            <DrivingLicenseEdit
+                onFormSubmit={handleFormSubmit}
+                defaultValues={drivingLicenseData}
+            // formRef={formRef}
+            >
+                <Container>
+                    <div className="flex items-center justify-between px-8">
+                        <Button
+                            className="ltr:mr-3 rtl:ml-3"
+                            type="button"
+                            variant="plain"
+                            icon={<TbArrowNarrowLeft />}
+                            onClick={handleBack}
+                        >
+                            Back
+                        </Button>
+                        <div className="flex items-center">
+                            <Button
+                                className="ltr:mr-3 rtl:ml-3"
+                                type="button"
+                                customColorClass={() =>
+                                    'border-error ring-1 ring-error text-error hover:border-error hover:ring-error hover:text-error bg-transparent'
+                                }
+                                icon={<TbTrash />}
+                                onClick={handleDiscard}
+                            >
+                                Discard
+                            </Button>
+                            <Button
+                                variant="solid"
+                                type="submit"
+                                onClick={() => document.getElementById("drivingLicenseForm")?.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }))}
+                                loading={isSubmiting}
+                            // disabled={isSubmiting}
+                            >
+                                {name ? 'Update' : 'Create'}
+                            </Button>
+                        </div>
                     </div>
-                </div>
-            </Container>
-            <BottomStickyBar>{children}</BottomStickyBar>
-        </Form>
+                </Container>
+            </DrivingLicenseEdit>
+            <ConfirmDialog
+                isOpen={discardConfirmationOpen}
+                type="danger"
+                title="Discard changes"
+                onClose={handleCancel}
+                onRequestClose={handleCancel}
+                onCancel={handleCancel}
+                onConfirm={handleConfirmDiscard}
+            >
+                <p>
+                    Are you sure you want discard this? This action can&apos;t
+                    be undo.{' '}
+                </p>
+            </ConfirmDialog>
+        </>
     )
 }
 
