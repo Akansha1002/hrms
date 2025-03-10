@@ -50,13 +50,13 @@ const EmployeeListTable = () => {
             },
             {
                 header: 'Status',
-                accessorKey: 'workflow_state',
+                accessorKey: 'employee_onboarding_status',
                 cell: (props) => {
                     const row = props.row.original
                     return (
                         <div className="flex items-center">
-                            <Tag className={statusColor[row.workflow_state]}>
-                                <span className="capitalize">{row.workflow_state}</span>
+                            <Tag className={statusColor[row.employee_onboarding_status]}>
+                                <span className="capitalize">{row.employee_onboarding_status}</span>
                             </Tag>
                         </div>
                     )

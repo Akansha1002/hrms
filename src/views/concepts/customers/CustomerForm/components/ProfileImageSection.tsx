@@ -32,7 +32,7 @@ const ProfileImageSection = ({ control }: ProfileImageSectionProps) => {
     }
 
     const handleUpload = async (files: File[], field: { onChange: (value: string) => void }) => {
-        debugger
+        
         if (files.length > 0) {
             const file = files[0]
             const formData = new FormData()

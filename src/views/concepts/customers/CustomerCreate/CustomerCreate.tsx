@@ -36,7 +36,7 @@ const CustomerEdit = () => {
     )
 
     const handleFormSubmit = async (values: EmployeeFormSchema) => {
-        debugger
+        
         setIsSubmiting(true)
         // await sleep(800)
         try {

@@ -25,7 +25,6 @@ export default function useEmployeeList() {
 
     const employeeList = data?.data || []
 
-
     return {
         employeeList,
         error,
