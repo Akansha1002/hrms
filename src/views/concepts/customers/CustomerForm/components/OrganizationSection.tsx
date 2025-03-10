@@ -61,12 +61,13 @@ const OrganizationSection = ({ control, errors }: AddressSectionProps) => {
             <h4 className="mb-6">Organization</h4>
             <div className="grid md:grid-cols-2 gap-4">
                 <FormItem
+                    asterisk
                     label="Date of Join"
-                    invalid={Boolean(errors.dateOfJoin)}
-                    errorMessage={errors.dateOfJoin?.message}
+                    invalid={Boolean(errors.date_of_joining)}
+                    errorMessage={errors.date_of_joining?.message}
                 >
                     <Controller
-                        name="dateOfJoin"
+                        name="date_of_joining"
                         control={control}
                         render={({ field }) =>
                             <Input
@@ -87,7 +88,9 @@ const OrganizationSection = ({ control, errors }: AddressSectionProps) => {
                         render={({ field }) =>
                             <Input
                                 type="date"
-                                {...field}
+                                value={field.value ?? ''}
+                                onChange={field.onChange}
+                                onBlur={field.onBlur}
                             />
                         }
                     />
@@ -103,7 +106,8 @@ const OrganizationSection = ({ control, errors }: AddressSectionProps) => {
                         render={({ field }) =>
                             <Select
                                 options={positionOptions}
-                                onChange={(option) => field.onChange(option)}
+                                value={positionOptions.find(option => option.value === field.value) || null}
+                                onChange={(option) => field.onChange(option ? option.value : '')}
                             />
                         }
                     />
@@ -119,23 +123,25 @@ const OrganizationSection = ({ control, errors }: AddressSectionProps) => {
                         render={({ field }) =>
                             <Select
                                 options={organizationStructureOptions}
-                                onChange={(option) => field.onChange(option)}
+                                value={organizationStructureOptions.find(option => option.value === field.value) || null}
+                                onChange={(option) => field.onChange(option ? option.value : '')}
                             />
                         }
                     />
                 </FormItem>
                 <FormItem
                     label="Location"
-                    invalid={Boolean(errors.location)}
-                    errorMessage={errors.location?.message}
+                    invalid={Boolean(errors.custom_location)}
+                    errorMessage={errors.custom_location?.message}
                 >
                     <Controller
-                        name="location"
+                        name="custom_location"
                         control={control}
                         render={({ field }) =>
                             <Select
                                 options={locationOptions}
-                                onChange={(option) => field.onChange(option)}
+                                value={locationOptions.find(option => option.value === field.value) || null}
+                                onChange={(option) => field.onChange(option ? option.value : '')}
                             />
                         }
                     />
@@ -151,7 +157,8 @@ const OrganizationSection = ({ control, errors }: AddressSectionProps) => {
                         render={({ field }) =>
                             <Select
                                 options={departmentOptions}
-                                onChange={(option) => field.onChange(option)}
+                                value={departmentOptions.find(option => option.value === field.value) || null}
+                                onChange={(option) => field.onChange(option ? option.value : '')}
                             />
                         }
                     />
@@ -167,7 +174,8 @@ const OrganizationSection = ({ control, errors }: AddressSectionProps) => {
                         render={({ field }) =>
                             <Select
                                 options={designationOptions}
-                                onChange={(option) => field.onChange(option)}
+                                value={designationOptions.find(option => option.value === field.value) || null}
+                                onChange={(option) => field.onChange(option ? option.value : '')}
                             />
                         }
                     />
@@ -183,18 +191,19 @@ const OrganizationSection = ({ control, errors }: AddressSectionProps) => {
                         render={({ field }) =>
                             <Select
                                 options={gradeOptions}
-                                onChange={(option) => field.onChange(option)}
+                                value={gradeOptions.find(option => option.value === field.value) || null}
+                                onChange={(option) => field.onChange(option ? option.value : '')}
                             />
                         }
                     />
                 </FormItem>
                 <FormItem
                     label="Cost Center"
-                    invalid={Boolean(errors.costCenter)}
-                    errorMessage={errors.costCenter?.message}
+                    invalid={Boolean(errors.payroll_cost_center)}
+                    errorMessage={errors.payroll_cost_center?.message}
                 >
                     <Controller
-                        name="costCenter"
+                        name="payroll_cost_center"
                         control={control}
                         render={({ field }) =>
                             <Input
@@ -205,12 +214,13 @@ const OrganizationSection = ({ control, errors }: AddressSectionProps) => {
                     />
                 </FormItem>
                 <FormItem
+                    asterisk
                     label="Official Email"
-                    invalid={Boolean(errors.officialEmail)}
-                    errorMessage={errors.officialEmail?.message}
+                    invalid={Boolean(errors.user_email)}
+                    errorMessage={errors.user_email?.message}
                 >
                     <Controller
-                        name="officialEmail"
+                        name="user_email"
                         control={control}
                         render={({ field }) =>
                             <Input
@@ -222,11 +232,11 @@ const OrganizationSection = ({ control, errors }: AddressSectionProps) => {
                 </FormItem>
                 <FormItem
                     label="Reporting Manager"
-                    invalid={Boolean(errors.reportingManager)}
-                    errorMessage={errors.reportingManager?.message}
+                    invalid={Boolean(errors.custom_reporting_manager)}
+                    errorMessage={errors.custom_reporting_manager?.message}
                 >
                     <Controller
-                        name="reportingManager"
+                        name="custom_reporting_manager"
                         control={control}
                         render={({ field }) =>
                             <Input
@@ -238,11 +248,11 @@ const OrganizationSection = ({ control, errors }: AddressSectionProps) => {
                 </FormItem>
                 <FormItem
                     label="Functional Manager"
-                    invalid={Boolean(errors.functionalManager)}
-                    errorMessage={errors.functionalManager?.message}
+                    invalid={Boolean(errors.custom_functional_manager)}
+                    errorMessage={errors.custom_functional_manager?.message}
                 >
                     <Controller
-                        name="functionalManager"
+                        name="custom_functional_manager"
                         control={control}
                         render={({ field }) =>
                             <Input
@@ -253,28 +263,12 @@ const OrganizationSection = ({ control, errors }: AddressSectionProps) => {
                     />
                 </FormItem>
                 <FormItem
-                    label="Action"
-                    invalid={Boolean(errors.action)}
-                    errorMessage={errors.action?.message}
+                    label="People Manager"
+                    invalid={Boolean(errors.custom_peoples_manager)}
+                    errorMessage={errors.custom_peoples_manager?.message}
                 >
                     <Controller
-                        name="action"
-                        control={control}
-                        render={({ field }) =>
-                            <Input
-                                type="text"
-                                {...field}
-                            />
-                        }
-                    />
-                </FormItem>
-                <FormItem
-                    label="Action Reason"
-                    invalid={Boolean(errors.actionReason)}
-                    errorMessage={errors.actionReason?.message}
-                >
-                    <Controller
-                        name="actionReason"
+                        name="custom_peoples_manager"
                         control={control}
                         render={({ field }) =>
                             <Input

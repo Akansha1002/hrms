@@ -1,75 +1,71 @@
 import type { Control, FieldErrors } from 'react-hook-form'
 
 export type PersonalInfoFields = {
-    employeeNumber: string
-    loginId: string
-    salutation: Array<{ value: string; label: string }>
-    firstName: string
-    middleName: string
-    lastName: string
-    gender: Array<{ value: string; label: string }>
-    dateOfBirth: string
+    employee?: string | null
+    loginId?: string | null
+    salutation?: string | null
+    first_name: string
+    middle_name?: string | null
+    last_name: string
+    gender?: string | null
+    date_of_birth: string
+    user_id?: string | null
 }
 
 export type OrganizationFields = {
-    dateOfJoin: string
-    effectiveFrom: string
-    position: string
-    orgStructure: string
-    location: string
-    department: string
-    designation: string
-    grade: string
-    costCenter: string
-    officialEmail: string
-    reportingManager: string
-    functionalManager: string
-    action: string
-    actionReason: string
-
-    country: string
-    address: string
-    postcode: string
-    city: string
+    date_of_joining: string
+    effectiveFrom?: string | null
+    position?: string | null
+    orgStructure?: string | null
+    custom_location?: string | null
+    department?: string | null
+    designation?: string | null
+    grade?: string | null
+    payroll_cost_center?: string | null
+    // officialEmail?: string | null
+    user_email?: string | null
+    custom_reporting_manager?: string | null
+    custom_functional_manager?: string | null
+    custom_peoples_manager?: string | null
 }
 
 export type ProfileImageFields = {
-    img: string
+    image?: string | File | null
 }
 
 export type AdditionalInformationFields = {
-    calendar: string
-    attendance: string
-    shiftType: string
-    shiftGroup: string
-    employmentStatus: string
-    confirmationDueDate: string
-    fullPartTime: string
-    contractType: string
-    contractEndDate: string
-    contractor: string
-    experienceCategory: string
-    experienceInMonth: string
-    noticePeriodInDays: string
-    secretary: string
+    calendar?: string | null
+    custom_attendance?: string | null
+    custom_shift_type?: string | null
+    custom_shift_group?: string | null
+    custom_employment_status?: string | null
+    final_confirmation_date?: string | null
+    custom_full_part_time?: string | null
+    custom_contract_type?: string | null
+    contract_end_date?: string | null
+    custom_contractor?: string | null
+    custom_experience_in_category?: string | null
+    custom_experience_in_months?: string | null
+    notice_number_of_days?: string | null
+    custom_secretary?: string | null
     reEmployed?: boolean
-    oldEmployeeNumber: string
+    custom_old_employee_number?: string | null
     systemUser?: boolean
-    originalHireDate: string
+    originalHireDate?: string | null
 }
 
 export type PayRollfields = {
-    pan: string
+    pan_number?: string | null
     pfApplicable?: boolean
-    pfNumber: string
+    custom_pf_number?: string | null
     esiApplicable?: boolean
-    esiNumber: string
+    custom_esi_number?: string | null
     ptApplicable?: boolean
-    ptLocation: string
-    glCode: string
-    payMode: string
-    appliedFrom: string
-    payGroup: string
+    custom_pt_location?: string | null
+    custom_gl_code?: string | null
+    salary_mode?: string | null
+    custom_applied_from?: string | null
+    custom_pay_group?: string | null
 }
 
 export type EmployeeFormSchema = PersonalInfoFields &

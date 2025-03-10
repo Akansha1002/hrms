@@ -125,7 +125,7 @@ const conceptsNavigationConfig: NavigationTree[] = [
                     },
                     {
                         key: 'concepts.customers.contactDetails',
-                        path: `${CONCEPTS_PREFIX_PATH}/customers/contact-details`,
+                        path: `${CONCEPTS_PREFIX_PATH}/customers/contact-details/HR-EMP-00007`,
                         title: 'Contact Details',
                         translateKey: 'nav.conceptsCustomers.contactDetails',
                         icon: 'customerList',
@@ -146,7 +146,7 @@ const conceptsNavigationConfig: NavigationTree[] = [
                         title: 'Family Details',
                         translateKey: 'nav.conceptsCustomers.familyDetails',
                         icon: 'customerList',
-                        type: NAV_ITEM_TYPE_ITEM,
+                        type: NAV_ITEM_TYPE_COLLAPSE,
                         authority: [ADMIN, USER],
                         meta: {
                             description: {
@@ -155,7 +155,57 @@ const conceptsNavigationConfig: NavigationTree[] = [
                                 label: 'Family Details',
                             },
                         },
-                        subMenu: [],
+                        subMenu: [
+                            {
+                                key: 'concepts.customers.familyDetails.list',
+                                path: `${CONCEPTS_PREFIX_PATH}/customers/family-details/list/HR-EMP-00007`,
+                                title: 'List',
+                                translateKey: 'nav.conceptsCustomers.familyDetails.list',
+                                icon: 'customerList',
+                                type: NAV_ITEM_TYPE_ITEM,
+                                authority: [ADMIN, USER],
+                                meta: {
+                                    description: {
+                                        translateKey:
+                                            'nav.conceptsCustomers.familyDetails.listDesc',
+                                        label: 'View all family detail',
+                                    },
+                                },
+                                subMenu: [],
+                            },
+                            {
+                                key: 'concepts.customers.familyDetails.create',
+                                path: `${CONCEPTS_PREFIX_PATH}/customers/family-details/create`,
+                                title: 'Create',
+                                translateKey: 'nav.conceptsCustomers.familyDetails.create',
+                                icon: 'customerList',
+                                type: NAV_ITEM_TYPE_ITEM,
+                                authority: [ADMIN, USER],
+                                meta: {
+                                    description: {
+                                        translateKey: 'nav.conceptsCustomers.familyDetails.listDesc',
+                                        label: 'Add new family details',
+                                    },
+                                },
+                                subMenu: [],
+                            },
+                            {
+                                key: 'concepts.customers.familyDetails.edit',
+                                path: `${CONCEPTS_PREFIX_PATH}/customers/family-details/edit/1`,
+                                title: 'Edit',
+                                translateKey: 'nav.conceptsCustomers.familyDetails.edit',
+                                icon: 'customerList',
+                                type: NAV_ITEM_TYPE_ITEM,
+                                authority: [ADMIN, USER],
+                                meta: {
+                                    description: {
+                                        translateKey: 'nav.conceptsCustomers.familyDetails.editDesc',
+                                        label: 'Edit family details',
+                                    },
+                                },
+                                subMenu: [],
+                            },
+                        ],
                     },
                     {
                         key: 'concepts.customers.educationDetails',
@@ -163,7 +213,7 @@ const conceptsNavigationConfig: NavigationTree[] = [
                         title: 'Education Details',
                         translateKey: 'nav.conceptsCustomers.educationDetails',
                         icon: 'customerList',
-                        type: NAV_ITEM_TYPE_ITEM,
+                        type: NAV_ITEM_TYPE_COLLAPSE,
                         authority: [ADMIN, USER],
                         meta: {
                             description: {
@@ -172,11 +222,61 @@ const conceptsNavigationConfig: NavigationTree[] = [
                                 label: 'Education Details',
                             },
                         },
-                        subMenu: [],
+                        subMenu: [
+                            {
+                                key: 'concepts.customers.educationDetails.list',
+                                path: `${CONCEPTS_PREFIX_PATH}/customers/education-details/list/HR-EMP-00007`,
+                                title: 'List',
+                                translateKey: 'nav.conceptsCustomers.educationDetails.list',
+                                icon: 'customerList',
+                                type: NAV_ITEM_TYPE_ITEM,
+                                authority: [ADMIN, USER],
+                                meta: {
+                                    description: {
+                                        translateKey:
+                                            'nav.conceptsCustomers.educationDetails.listDesc',
+                                        label: 'View all education detail',
+                                    },
+                                },
+                                subMenu: [],
+                            },
+                            {
+                                key: 'concepts.customers.educationDetails.create',
+                                path: `${CONCEPTS_PREFIX_PATH}/customers/education-details/create`,
+                                title: 'Create',
+                                translateKey: 'nav.conceptsCustomers.educationDetails.create',
+                                icon: 'customerList',
+                                type: NAV_ITEM_TYPE_ITEM,
+                                authority: [ADMIN, USER],
+                                meta: {
+                                    description: {
+                                        translateKey: 'nav.conceptsCustomers.educationDetails.listDesc',
+                                        label: 'Add new education details',
+                                    },
+                                },
+                                subMenu: [],
+                            },
+                            {
+                                key: 'concepts.customers.educationDetails.edit',
+                                path: `${CONCEPTS_PREFIX_PATH}/customers/education-details/edit/1`,
+                                title: 'Edit',
+                                translateKey: 'nav.conceptsCustomers.educationDetails.edit',
+                                icon: 'customerList',
+                                type: NAV_ITEM_TYPE_ITEM,
+                                authority: [ADMIN, USER],
+                                meta: {
+                                    description: {
+                                        translateKey: 'nav.conceptsCustomers.educationDetails.editDesc',
+                                        label: 'Edit education details',
+                                    },
+                                },
+                                subMenu: [],
+                            },
+                        ],
                     },
                     {
                         key: 'concepts.customers.passportDetails',
-                        path: `${CONCEPTS_PREFIX_PATH}/customers/passport-details`,
+                        path: `${CONCEPTS_PREFIX_PATH}/customers/passport-details/HR-EMP-00007`,
                         title: 'Passport Details',
                         translateKey: 'nav.conceptsCustomers.passportDetails',
                         icon: 'customerList',
@@ -193,7 +293,7 @@ const conceptsNavigationConfig: NavigationTree[] = [
                     },
                     {
                         key: 'concepts.customers.employeeDetails',
-                        path: `${CONCEPTS_PREFIX_PATH}/customers/employee-details`,
+                        path: `${CONCEPTS_PREFIX_PATH}/customers/employee-details/HR-EMP-00007`,
                         title: 'Employee Details',
                         translateKey: 'nav.conceptsCustomers.employeeDetails',
                         icon: 'customerList',
@@ -214,7 +314,7 @@ const conceptsNavigationConfig: NavigationTree[] = [
                         title: 'Past Employment Details',
                         translateKey: 'nav.conceptsCustomers.pastEmploymentDetails',
                         icon: 'customerList',
-                        type: NAV_ITEM_TYPE_ITEM,
+                        type: NAV_ITEM_TYPE_COLLAPSE,
                         authority: [ADMIN, USER],
                         meta: {
                             description: {
@@ -223,11 +323,63 @@ const conceptsNavigationConfig: NavigationTree[] = [
                                 label: 'Past Employment Details',
                             },
                         },
-                        subMenu: [],
+                        subMenu: [
+                            {
+                                key: 'concepts.customers.pastEmploymentDetails.list',
+                                path: `${CONCEPTS_PREFIX_PATH}/customers/past-employment-details/list/HR-EMP-00007`,
+                                title: 'List',
+                                translateKey: 'nav.conceptsCustomers.pastEmploymentDetails.list',
+                                icon: 'customerList',
+                                type: NAV_ITEM_TYPE_ITEM,
+                                authority: [ADMIN, USER],
+                                meta: {
+                                    description: {
+                                        translateKey:
+                                            'nav.conceptsCustomers.pastEmploymentDetails.listDesc',
+                                        label: 'View all Past Employment Details',
+                                    },
+                                },
+                                subMenu: [],
+                            },
+                            {
+                                key: 'concepts.customers.pastEmploymentDetails.create',
+                                path: `${CONCEPTS_PREFIX_PATH}/customers/past-employment-details/create`,
+                                title: 'Create',
+                                translateKey: 'nav.conceptsCustomers.pastEmploymentDetails.create',
+                                icon: 'customerList',
+                                type: NAV_ITEM_TYPE_ITEM,
+                                authority: [ADMIN, USER],
+                                meta: {
+                                    description: {
+                                        translateKey:
+                                            'nav.conceptsCustomers.pastEmploymentDetails.createDesc',
+                                        label: 'Add new Past Employment Details',
+                                    },
+                                },
+                                subMenu: [],
+                            },
+                            {
+                                key: 'concepts.customers.pastEmploymentDetails.edit',
+                                path: `${CONCEPTS_PREFIX_PATH}/customers/past-employment-details/edit/1`,
+                                title: 'Edit',
+                                translateKey: 'nav.conceptsCustomers.pastEmploymentDetails.edit',
+                                icon: 'customerList',
+                                type: NAV_ITEM_TYPE_ITEM,
+                                authority: [ADMIN, USER],
+                                meta: {
+                                    description: {
+                                        translateKey:
+                                            'nav.conceptsCustomers.pastEmploymentDetails.editDesc',
+                                        label: 'Edit Past Employment Details',
+                                    },
+                                },
+                                subMenu: [],
+                            },
+                        ],
                     },
                     {
                         key: 'concepts.customers.bankDetails',
-                        path: `${CONCEPTS_PREFIX_PATH}/customers/bank-details`,
+                        path: `${CONCEPTS_PREFIX_PATH}/customers/bank-details/HR-EMP-00007`,
                         title: 'Bank Details',
                         translateKey: 'nav.conceptsCustomers.bankDetails',
                         icon: 'customerList',
@@ -244,7 +396,7 @@ const conceptsNavigationConfig: NavigationTree[] = [
                     },
                     {
                         key: 'concepts.customers.drivingLicense',
-                        path: `${CONCEPTS_PREFIX_PATH}/customers/driving-license`,
+                        path: `${CONCEPTS_PREFIX_PATH}/customers/driving-license/HR-EMP-00007`,
                         title: 'Driving License',
                         translateKey: 'nav.conceptsCustomers.drivingLicense',
                         icon: 'customerList',

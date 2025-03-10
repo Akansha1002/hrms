@@ -8,9 +8,19 @@ import { useNavigate } from "react-router-dom"
 import { useState } from 'react'
 import { FormSectionBaseProps } from '../types'
 import ComputeCtcDrawer from '../../ComputeCtc/components/ComputeCtcDrawer'
+import { Select } from '@/components/ui/Select'
 
 type PayRollProps = FormSectionBaseProps
 
+const ptLocationOptions = [
+    { value: 'andhrapradesh', label: 'AndhraPradesh' },
+    { value: 'telangana', label: 'Telangana' },
+];
+
+const payGroupOptions = [
+    { value: 'centillion', label: 'Centillion' },
+    { value: 'centillionManagement', label: 'Centilion Management' },
+];
 
 const PayRollSection = ({ control, errors }: PayRollProps) => {
     const [drawerOpen, setDrawerOpen] = useState(false)
@@ -26,10 +36,19 @@ const PayRollSection = ({ control, errors }: PayRollProps) => {
                 <div className="grid md:grid-cols-2 gap-4">
                     <FormItem
                         label="PAN"
-                        invalid={Boolean(errors.pan)}
-                        errorMessage={errors.pan?.message}
+                        invalid={Boolean(errors.pan_number)}
+                        errorMessage={errors.pan_number?.message}
                     >
-                        <Controller name="pan" control={control} render={({ field }) => <Input type="text" {...field} />} />
+                        <Controller
+                            name="pan_number"
+                            control={control}
+                            render={({ field }) =>
+                                <Input
+                                    type="text"
+                                    {...field}
+                                />
+                            }
+                        />
                     </FormItem>
                     <div className="flex items-center justify-between gap-8">
                         <FormItem>
@@ -53,10 +72,19 @@ const PayRollSection = ({ control, errors }: PayRollProps) => {
                         </FormItem>
                         <FormItem
                             label="PF No."
-                            invalid={Boolean(errors.pfNumber)}
-                            errorMessage={errors.pfNumber?.message}
+                            invalid={Boolean(errors.custom_pf_number)}
+                            errorMessage={errors.custom_pf_number?.message}
                         >
-                            <Controller name="pfNumber" control={control} render={({ field }) => <Input type="text" {...field} />} />
+                            <Controller
+                                name="custom_pf_number"
+                                control={control}
+                                render={({ field }) =>
+                                    <Input
+                                        type="text"
+                                        {...field}
+                                    />
+                                }
+                            />
                         </FormItem>
                     </div>
                     <div className="flex items-center justify-between gap-8">
@@ -82,10 +110,19 @@ const PayRollSection = ({ control, errors }: PayRollProps) => {
 
                         <FormItem
                             label="ESI Number"
-                            invalid={Boolean(errors.esiNumber)}
-                            errorMessage={errors.esiNumber?.message}
+                            invalid={Boolean(errors.custom_esi_number)}
+                            errorMessage={errors.custom_esi_number?.message}
                         >
-                            <Controller name="esiNumber" control={control} render={({ field }) => <Input type="text" {...field} />} />
+                            <Controller
+                                name="custom_esi_number"
+                                control={control}
+                                render={({ field }) =>
+                                    <Input
+                                        type="text"
+                                        {...field}
+                                    />
+                                }
+                            />
                         </FormItem>
 
                     </div>
@@ -112,40 +149,87 @@ const PayRollSection = ({ control, errors }: PayRollProps) => {
 
                         <FormItem
                             label="PT Location"
-                            invalid={Boolean(errors.ptLocation)}
-                            errorMessage={errors.ptLocation?.message}
+                            invalid={Boolean(errors.custom_pt_location)}
+                            errorMessage={errors.custom_pt_location?.message}
                         >
-                            <Controller name="ptLocation" control={control} render={({ field }) => <Input type="text" {...field} />} />
+                            <Controller
+                                name="custom_pt_location"
+                                control={control}
+                                render={({ field }) =>
+                                    <Select
+                                        options={ptLocationOptions}
+                                        value={ptLocationOptions.find(option => option.value === field.value) || null}
+                                        onChange={(option) => field.onChange(option ? option.value : '')}
+                                    />
+                                }
+                            />
                         </FormItem>
 
                     </div>
                     <FormItem
                         label="GL Code"
-                        invalid={Boolean(errors.glCode)}
-                        errorMessage={errors.glCode?.message}
+                        invalid={Boolean(errors.custom_gl_code)}
+                        errorMessage={errors.custom_gl_code?.message}
                     >
-                        <Controller name="glCode" control={control} render={({ field }) => <Input type="text" {...field} />} />
+                        <Controller
+                            name="custom_gl_code"
+                            control={control}
+                            render={({ field }) =>
+                                <Input
+                                    type="text"
+                                    {...field}
+                                />
+                            }
+                        />
                     </FormItem>
                     <FormItem
                         label="Pay Mode"
-                        invalid={Boolean(errors.payMode)}
-                        errorMessage={errors.payMode?.message}
+                        invalid={Boolean(errors.salary_mode)}
+                        errorMessage={errors.salary_mode?.message}
                     >
-                        <Controller name="payMode" control={control} render={({ field }) => <Input type="text" {...field} />} />
+                        <Controller
+                            name="salary_mode"
+                            control={control}
+                            render={({ field }) =>
+                                <Input
+                                    type="text"
+                                    {...field}
+                                />
+                            }
+                        />
                     </FormItem>
                     <FormItem
                         label="Applied From"
-                        invalid={Boolean(errors.appliedFrom)}
-                        errorMessage={errors.appliedFrom?.message}
+                        invalid={Boolean(errors.custom_applied_from)}
+                        errorMessage={errors.custom_applied_from?.message}
                     >
-                        <Controller name="appliedFrom" control={control} render={({ field }) => <Input type="text" {...field} />} />
+                        <Controller
+                            name="custom_applied_from"
+                            control={control}
+                            render={({ field }) =>
+                                <Input
+                                    type="text"
+                                    {...field}
+                                />
+                            }
+                        />
                     </FormItem>
                     <FormItem
                         label="Pay Group"
-                        invalid={Boolean(errors.payGroup)}
-                        errorMessage={errors.payGroup?.message}
+                        invalid={Boolean(errors.custom_pay_group)}
+                        errorMessage={errors.custom_pay_group?.message}
                     >
-                        <Controller name="payGroup" control={control} render={({ field }) => <Input type="text" {...field} />} />
+                        <Controller
+                            name="custom_pay_group"
+                            control={control}
+                            render={({ field }) =>
+                                <Select
+                                    options={payGroupOptions}
+                                    value={payGroupOptions.find(option => option.value === field.value) || null}
+                                    onChange={(option) => field.onChange(option ? option.value : '')}
+                                />
+                            }
+                        />
                     </FormItem>
                     <FormItem className="inline-flex flex-wrap xl:flex gap-2">
                         <Button variant="solid" onClick={handleOnClick}>

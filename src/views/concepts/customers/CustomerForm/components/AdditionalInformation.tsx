@@ -6,7 +6,13 @@ import { Controller } from 'react-hook-form'
 import { Select } from '@/components/ui/Select'
 import { FormSectionBaseProps } from '../types'
 
-type AdditionalInformationProps = FormSectionBaseProps
+type AdditionalInformationProps = {
+    // FormSectionBaseProps: any,
+    control: any;
+    errors: any;
+    holidayList: { value: string; label: string }[];
+    isLoading: boolean,
+}
 
 const calendarOptions = [
     { value: 'hyderabad', label: 'Hyderabad' },
@@ -51,9 +57,22 @@ const employmentTypeOptions = [
     { value: 'partTimerMorning', label: 'Part Timer Morning' }
 ];
 
+const contractTypeOptions = [
+    { value: 'regular', label: 'Regular' },
+    { value: 'temporary', label: 'Temporary' },
+    { value: 'consultant', label: 'Consultant' },
+    { value: 'intern', label: 'Intern' }
+];
+
+const experienceCategoryOptions = [
+    { value: 'fresher', label: 'Fresher' },
+    { value: 'consultant', label: 'Consultant' },
+    { value: 'experienced', label: 'Experienced' },
+    { value: 'intern', label: 'Intern' }
+];
 
 
-const AdditionalInformation = ({ control, errors }: AdditionalInformationProps) => {
+const AdditionalInformation = ({ control, errors, holidayList, isLoading, }: AdditionalInformationProps) => {
     return (
         <Card>
             <h4 className="mb-6">Additional Information </h4>
@@ -64,86 +83,92 @@ const AdditionalInformation = ({ control, errors }: AdditionalInformationProps) 
                     errorMessage={errors.calendar?.message}
                 >
                     <Controller
-                        name="calendar" control={control}
+                        name="calendar"
+                        control={control}
                         render={({ field }) =>
                             <Select
-                                options={calendarOptions}
-                                onChange={(option) => field.onChange(option)}
+                                options={isLoading ? [{ value: '', label: 'Loading...' }] : holidayList}
+                                value={holidayList.find(option => option.value === field.value) || null}
+                                onChange={(option) => field.onChange(option ? option.value : '')}
                             />
                         }
                     />
                 </FormItem>
                 <FormItem
                     label="Attendance"
-                    invalid={Boolean(errors.attendance)}
-                    errorMessage={errors.attendance?.message}
+                    invalid={Boolean(errors.custom_attendance)}
+                    errorMessage={errors.custom_attendance?.message}
                 >
                     <Controller
-                        name="attendance"
+                        name="custom_attendance"
                         control={control}
                         render={({ field }) =>
                             <Select
                                 options={attendanceOptions}
-                                onChange={(option) => field.onChange(option)}
+                                value={attendanceOptions.find(option => option.value === field.value) || null}
+                                onChange={(option) => field.onChange(option ? option.value : '')}
                             />
                         }
                     />
                 </FormItem>
                 <FormItem
                     label="Shift Type"
-                    invalid={Boolean(errors.shiftType)}
-                    errorMessage={errors.shiftType?.message}
+                    invalid={Boolean(errors.custom_shift_type)}
+                    errorMessage={errors.custom_shift_type?.message}
                 >
                     <Controller
-                        name="shiftType"
+                        name="custom_shift_type"
                         control={control}
                         render={({ field }) =>
                             <Select
                                 options={shiftTypeOptions}
-                                onChange={(option) => field.onChange(option)}
+                                value={shiftTypeOptions.find(option => option.value === field.value) || null}
+                                onChange={(option) => field.onChange(option ? option.value : '')}
                             />
                         }
                     />
                 </FormItem>
                 <FormItem
                     label="Shift Group"
-                    invalid={Boolean(errors.shiftGroup)}
-                    errorMessage={errors.shiftGroup?.message}
+                    invalid={Boolean(errors.custom_shift_group)}
+                    errorMessage={errors.custom_shift_group?.message}
                 >
                     <Controller
-                        name="shiftGroup"
+                        name="custom_shift_group"
                         control={control}
                         render={({ field }) =>
                             <Select
                                 options={shiftGroupOptions}
-                                onChange={(option) => field.onChange(option)}
+                                value={shiftGroupOptions.find(option => option.value === field.value) || null}
+                                onChange={(option) => field.onChange(option ? option.value : '')}
                             />
                         }
                     />
                 </FormItem>
                 <FormItem
                     label="Employment Status"
-                    invalid={Boolean(errors.employmentStatus)}
-                    errorMessage={errors.employmentStatus?.message}
+                    invalid={Boolean(errors.custom_employment_status)}
+                    errorMessage={errors.custom_employment_status?.message}
                 >
                     <Controller
-                        name="employmentStatus"
+                        name="custom_employment_status"
                         control={control}
                         render={({ field }) =>
                             <Select
                                 options={employmentStatusOptions}
-                                onChange={(option) => field.onChange(option)}
+                                value={employmentStatusOptions.find(option => option.value === field.value) || null}
+                                onChange={(option) => field.onChange(option ? option.value : '')}
                             />
                         }
                     />
                 </FormItem>
                 <FormItem
                     label="Confirmation Due Date"
-                    invalid={Boolean(errors.confirmationDueDate)}
-                    errorMessage={errors.confirmationDueDate?.message}
+                    invalid={Boolean(errors.final_confirmation_date)}
+                    errorMessage={errors.final_confirmation_date?.message}
                 >
                     <Controller
-                        name="confirmationDueDate"
+                        name="final_confirmation_date"
                         control={control}
                         render={({ field }) =>
                             <Input
@@ -155,40 +180,134 @@ const AdditionalInformation = ({ control, errors }: AdditionalInformationProps) 
                 </FormItem>
                 <FormItem
                     label="Full/Part Time"
-                    invalid={Boolean(errors.fullPartTime)}
-                    errorMessage={errors.fullPartTime?.message}
+                    invalid={Boolean(errors.custom_full_part_time)}
+                    errorMessage={errors.custom_full_part_time?.message}
                 >
                     <Controller
-                        name="fullPartTime"
+                        name="custom_full_part_time"
                         control={control}
                         render={({ field }) =>
                             <Select
                                 options={employmentTypeOptions}
-                                onChange={(option) => field.onChange(option)}
+                                value={employmentTypeOptions.find(option => option.value === field.value) || null}
+                                onChange={(option) => field.onChange(option ? option.value : '')}
                             />
                         }
                     />
                 </FormItem>
-                <FormItem label="Contract Type" invalid={Boolean(errors.contractType)} errorMessage={errors.contractType?.message}>
-                    <Controller name="contractType" control={control} render={({ field }) => <Input type="text" {...field} />} />
+                <FormItem
+                    label="Contract Type"
+                    invalid={Boolean(errors.custom_contract_type)}
+                    errorMessage={errors.custom_contract_type?.message}
+                >
+                    <Controller
+                        name="custom_contract_type"
+                        control={control}
+                        render={({ field }) =>
+                            <Select
+                                options={contractTypeOptions}
+                                value={contractTypeOptions.find(option => option.value === field.value) || null}
+                                onChange={(option) => field.onChange(option ? option.value : '')}
+                            />
+                        }
+                    />
                 </FormItem>
-                <FormItem label="Contract End Date" invalid={Boolean(errors.contractEndDate)} errorMessage={errors.contractEndDate?.message}>
-                    <Controller name="contractEndDate" control={control} render={({ field }) => <Input type="date" {...field} />} />
+                <FormItem
+                    label="Contract End Date"
+                    invalid={Boolean(errors.contract_end_date)}
+                    errorMessage={errors.contract_end_date?.message}
+                >
+                    <Controller
+                        name="contract_end_date"
+                        control={control}
+                        render={({ field }) =>
+                            <Input
+                                type="date"
+                                {...field}
+                            />
+                        }
+                    />
                 </FormItem>
-                <FormItem label="Contractor" invalid={Boolean(errors.contractor)} errorMessage={errors.contractor?.message}>
-                    <Controller name="contractor" control={control} render={({ field }) => <Input type="text" {...field} />} />
+                <FormItem
+                    label="Contractor"
+                    invalid={Boolean(errors.custom_contractor)}
+                    errorMessage={errors.custom_contractor?.message}
+                >
+                    <Controller
+                        name="custom_contractor"
+                        control={control}
+                        render={({ field }) =>
+                            <Input
+                                type="text"
+                                {...field}
+                            />
+                        }
+                    />
                 </FormItem>
-                <FormItem label="Experience Category" invalid={Boolean(errors.experienceCategory)} errorMessage={errors.experienceCategory?.message}>
-                    <Controller name="experienceCategory" control={control} render={({ field }) => <Input type="text" {...field} />} />
+                <FormItem
+                    label="Experience Category"
+                    invalid={Boolean(errors.custom_experience_in_category)}
+                    errorMessage={errors.custom_experience_in_category?.message}
+                >
+                    <Controller
+                        name="custom_experience_in_category"
+                        control={control}
+                        render={({ field }) =>
+                            <Select
+                                options={experienceCategoryOptions}
+                                value={experienceCategoryOptions.find(option => option.value === field.value) || null}
+                                onChange={(option) => field.onChange(option ? option.value : '')}
+                            />
+                        }
+                    />
                 </FormItem>
-                <FormItem label="Experience in Months" invalid={Boolean(errors.experienceInMonth)} errorMessage={errors.experienceInMonth?.message}>
-                    <Controller name="experienceInMonth" control={control} render={({ field }) => <Input type="number" {...field} />} />
+                <FormItem
+                    label="Experience in Months"
+                    invalid={Boolean(errors.custom_experience_in_months)}
+                    errorMessage={errors.custom_experience_in_months?.message}
+                >
+                    <Controller
+                        name="custom_experience_in_months"
+                        control={control}
+                        render={({ field }) =>
+                            <Input
+                                type="number"
+                                {...field}
+                            />
+                        }
+                    />
                 </FormItem>
-                <FormItem label="Notice Period (Days)" invalid={Boolean(errors.noticePeriodInDays)} errorMessage={errors.noticePeriodInDays?.message}>
-                    <Controller name="noticePeriodInDays" control={control} render={({ field }) => <Input type="number" {...field} />} />
+                <FormItem
+                    label="Notice Period (Days)"
+                    invalid={Boolean(errors.notice_number_of_days)}
+                    errorMessage={errors.notice_number_of_days?.message}
+                >
+                    <Controller
+                        name="notice_number_of_days"
+                        control={control}
+                        render={({ field }) =>
+                            <Input
+                                type="number"
+                                {...field}
+                            />
+                        }
+                    />
                 </FormItem>
-                <FormItem label="Secretary" invalid={Boolean(errors.secretary)} errorMessage={errors.secretary?.message}>
-                    <Controller name="secretary" control={control} render={({ field }) => <Input type="text" {...field} />} />
+                <FormItem
+                    label="Secretary"
+                    invalid={Boolean(errors.custom_secretary)}
+                    errorMessage={errors.custom_secretary?.message}
+                >
+                    <Controller
+                        name="custom_secretary"
+                        control={control}
+                        render={({ field }) =>
+                            <Input
+                                type="text"
+                                {...field}
+                            />
+                        }
+                    />
                 </FormItem>
                 <div className="flex items-center justify-between gap-8">
                     <FormItem>
@@ -213,10 +332,19 @@ const AdditionalInformation = ({ control, errors }: AdditionalInformationProps) 
 
                     <FormItem
                         label="Old Employee No"
-                        invalid={Boolean(errors.oldEmployeeNumber)}
-                        errorMessage={errors.oldEmployeeNumber?.message}
+                        invalid={Boolean(errors.custom_old_employee_number)}
+                        errorMessage={errors.custom_old_employee_number?.message}
                     >
-                        <Controller name="oldEmployeeNumber" control={control} render={({ field }) => <Input type="text" {...field} />} />
+                        <Controller
+                            name="custom_old_employee_number"
+                            control={control}
+                            render={({ field }) =>
+                                <Input
+                                    type="text"
+                                    {...field}
+                                />
+                            }
+                        />
                     </FormItem>
                 </div>
                 <div className="flex items-center justify-between gap-8">
@@ -245,7 +373,16 @@ const AdditionalInformation = ({ control, errors }: AdditionalInformationProps) 
                         invalid={Boolean(errors.originalHireDate)}
                         errorMessage={errors.originalHireDate?.message}
                     >
-                        <Controller name="originalHireDate" control={control} render={({ field }) => <Input type="date" {...field} />} />
+                        <Controller
+                            name="originalHireDate"
+                            control={control}
+                            render={({ field }) =>
+                                <Input
+                                    type="date"
+                                    {...field}
+                                />
+                            }
+                        />
                     </FormItem>
                 </div>
             </div>

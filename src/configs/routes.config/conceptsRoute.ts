@@ -70,7 +70,7 @@ const conceptsRoute: Routes = [
 
     {
         key: 'concepts.customers.contactDetails',
-        path: `${CONCEPTS_PREFIX_PATH}/customers/contact-details`,
+        path: `${CONCEPTS_PREFIX_PATH}/customers/contact-details/:name`,
         component: lazy(
             () => import('@/views/concepts/customers/ContactDetails'),
         ),
@@ -78,6 +78,8 @@ const conceptsRoute: Routes = [
         meta: {
             header: {
                 title: 'Contact Details',
+                description:
+                    'Employee Contact Details',
                 contained: true,
             },
             footer: false,
@@ -85,10 +87,10 @@ const conceptsRoute: Routes = [
     },
 
     {
-        key: 'concepts.customers.familyDetails',
-        path: `${CONCEPTS_PREFIX_PATH}/customers/family-details`,
+        key: 'concepts.customers.familyDetails.list',
+        path: `${CONCEPTS_PREFIX_PATH}/customers/family-details/list/:name`,
         component: lazy(
-            () => import('@/views/concepts/customers/FamilyDetails'),
+            () => import('@/views/concepts/customers/FamilyDetails/FamilyDetailList'),
         ),
         authority: [ADMIN, USER],
         meta: {
@@ -98,74 +100,170 @@ const conceptsRoute: Routes = [
     },
 
     {
-        key: 'concepts.customers.educationDetails',
-        path: `${CONCEPTS_PREFIX_PATH}/customers/education-details`,
+        key: 'concepts.customers.familyDetails.create',
+        path: `${CONCEPTS_PREFIX_PATH}/customers/family-details/create`,
         component: lazy(
-            () => import('@/views/concepts/customers/EducationDetails'),
+            () => import('@/views/concepts/customers/FamilyDetails/FamilyDetailCreate'),
         ),
         authority: [ADMIN, USER],
         meta: {
             pageContainerType: 'contained',
+            footer: false,
+        },
+    },
+
+    {
+        key: 'concepts.customers.familyDetails.edit',
+        path: `${CONCEPTS_PREFIX_PATH}/customers/family-details/edit/:name`,
+        component: lazy(
+            () => import('@/views/concepts/customers/FamilyDetails/FamilyDetailEdit'),
+        ),
+        authority: [ADMIN, USER],
+        meta: {
+            pageContainerType: 'contained',
+            footer: false,
+        },
+    },
+
+
+    {
+        key: 'concepts.customers.educationDetails.create',
+        path: `${CONCEPTS_PREFIX_PATH}/customers/education-details/create`,
+        component: lazy(
+            () => import('@/views/concepts/customers/EducationDetails/EducationDetailCreate'),
+        ),
+        authority: [ADMIN, USER],
+        meta: {
+            pageContainerType: 'contained',
+            footer: false,
+        },
+    },
+
+    {
+        key: 'concepts.customers.educationDetails.list',
+        path: `${CONCEPTS_PREFIX_PATH}/customers/education-details/list/:name`,
+        component: lazy(
+            () => import('@/views/concepts/customers/EducationDetails/EducationDetailList'),
+        ),
+        authority: [ADMIN, USER],
+        meta: {
+            pageContainerType: 'contained',
+        },
+    },
+
+    {
+        key: 'concepts.customers.educationDetails.edit',
+        path: `${CONCEPTS_PREFIX_PATH}/customers/education-details/edit/:name`,
+        component: lazy(
+            () => import('@/views/concepts/customers/EducationDetails/EducationDetailEdit'),
+        ),
+        authority: [ADMIN, USER],
+        meta: {
+            pageContainerType: 'contained',
+            footer: false,
         },
     },
 
     {
         key: 'concepts.customers.passportDetails',
-        path: `${CONCEPTS_PREFIX_PATH}/customers/passport-details`,
+        path: `${CONCEPTS_PREFIX_PATH}/customers/passport-details/:name`,
         component: lazy(
             () => import('@/views/concepts/customers/PassportDetails'),
         ),
         authority: [ADMIN, USER],
         meta: {
-            pageContainerType: 'contained',
+            // pageContainerType: 'contained',
+            header: {
+                title: '',
+                description:
+                    'Employee Passport Detail Form',
+                contained: true,
+            },
+            footer: false,
         },
     },
 
     {
         key: 'concepts.customers.employeeDetails',
-        path: `${CONCEPTS_PREFIX_PATH}/customers/employee-details`,
+        path: `${CONCEPTS_PREFIX_PATH}/customers/employee-details/:name`,
         component: lazy(
             () => import('@/views/concepts/customers/EmployeeDetails'),
         ),
         authority: [ADMIN, USER],
         meta: {
             pageContainerType: 'contained',
+            footer: false,
         },
     },
 
     {
-        key: 'concepts.customers.pastEmploymentDetails',
-        path: `${CONCEPTS_PREFIX_PATH}/customers/past-employment-details`,
+        key: 'concepts.customers.pastEmploymentDetails.list',
+        path: `${CONCEPTS_PREFIX_PATH}/customers/past-employment-details/list/:name`,
         component: lazy(
-            () => import('@/views/concepts/customers/PastEmploymentDetails'),
+            () => import('@/views/concepts/customers/PastEmploymentDetails/PastEmploymentDetailList'),
         ),
         authority: [ADMIN, USER],
         meta: {
             pageContainerType: 'contained',
+            footer: false,
+        },
+    },
+
+    {
+        key: 'concepts.customers.pastEmploymentDetails.create',
+        path: `${CONCEPTS_PREFIX_PATH}/customers/past-employment-details/create`,
+        component: lazy(
+            () => import('@/views/concepts/customers/PastEmploymentDetails/PastEmploymentDetailCreate'),
+        ),
+        authority: [ADMIN, USER],
+        meta: {
+            pageContainerType: 'contained',
+            footer: false,
+        },
+    },
+
+    {
+        key: 'concepts.customers.pastEmploymentDetails.edit',
+        path: `${CONCEPTS_PREFIX_PATH}/customers/past-employment-details/edit/:name`,
+        component: lazy(
+            () => import('@/views/concepts/customers/PastEmploymentDetails/PastEmploymentDetailEdit'),
+        ),
+        authority: [ADMIN, USER],
+        meta: {
+            pageContainerType: 'contained',
+            footer: false,
         },
     },
 
     {
         key: 'concepts.customers.bankDetails',
-        path: `${CONCEPTS_PREFIX_PATH}/customers/bank-details`,
+        path: `${CONCEPTS_PREFIX_PATH}/customers/bank-details/:name`,
         component: lazy(
             () => import('@/views/concepts/customers/BankDetails'),
         ),
         authority: [ADMIN, USER],
         meta: {
             pageContainerType: 'contained',
+            footer: false,
         },
     },
 
     {
         key: 'concepts.customers.drivingLicense',
-        path: `${CONCEPTS_PREFIX_PATH}/customers/driving-license`,
+        path: `${CONCEPTS_PREFIX_PATH}/customers/driving-license/:name`,
         component: lazy(
             () => import('@/views/concepts/customers/DrivingLicense'),
         ),
         authority: [ADMIN, USER],
         meta: {
-            pageContainerType: 'contained',
+            // pageContainerType: 'contained',
+            header: {
+                title: '',
+                description:
+                    'Employee Driving License Form',
+                contained: true,
+            },
+            footer: false,
         },
     },
 
