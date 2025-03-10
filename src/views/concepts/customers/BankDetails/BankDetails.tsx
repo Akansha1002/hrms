@@ -1,98 +1,153 @@
-import { useEffect } from 'react'
-import { Form } from '@/components/ui/Form'
+import { useState } from 'react'
 import Container from '@/components/shared/Container'
-import BottomStickyBar from '@/components/template/BottomStickyBar'
-import isEmpty from 'lodash/isEmpty'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
-import type { ZodType } from 'zod'
-import type { CommonProps } from '@/@types/common'
-import { BankDetailsSchema } from './types'
-import CorporateBank from './CorporateBank'
-import ComputeCtc from '../ComputeCtc'
+import Button from '@/components/ui/Button'
+import Notification from '@/components/ui/Notification'
+import toast from '@/components/ui/toast'
+import ConfirmDialog from '@/components/shared/ConfirmDialog'
+import { TbArrowNarrowLeft, TbTrash } from 'react-icons/tb'
+import { useNavigate, useParams } from 'react-router-dom'
+import useSWR from 'swr'
+import { apiCreateBankDetails, apiGetBankDetails, apiUpdateBankDetails } from '@/services/BankDetailService'
+import { BankDetailsSchema, GetBankDetailResponse } from './types'
+import BankDetailEdit from './BankDetailCreate'
+const BankDetails = () => {
+    const navigate = useNavigate()
+    const { name } = useParams()
 
-type BankDetailsProps = {
-    onFormSubmit: (values: BankDetailsSchema) => void
-    defaultValues?: BankDetailsSchema
-    newCustomer?: boolean
-} & CommonProps
+    const [discardConfirmationOpen, setDiscardConfirmationOpen] = useState(false)
+    const [isSubmiting, setIsSubmiting] = useState(false)
 
-const validationSchema: ZodType<BankDetailsSchema> = z.object({
-    email: z
-        .string()
-        .min(1, { message: 'Email required' })
-        .email({ message: 'Invalid email' }),
-    dialCode: z.string().min(1, { message: 'Please select your country code' }),
-    phoneNumber: z
-        .string()
-        .min(1, { message: 'Please input your mobile number' }),
-
-    dateOfJoin: z.string().min(1, { message: 'Date of join required' }),
-    effectiveFrom: z.string().min(1, { message: 'Effective from required' }),
-    position: z.string().min(1, { message: 'Position required' }),
-    orgStructure: z.string().min(1, { message: 'Organization structure required' }),
-
-    country: z.string().min(1, { message: 'Please select a country' }),
-    address: z.string().min(1, { message: 'Addrress required' }),
-    postcode: z.string().min(1, { message: 'Postcode required' }),
-    city: z.string().min(1, { message: 'City required' }),
-    img: z.string(),
-    tags: z.array(z.object({ value: z.string(), label: z.string() })),
-})
-
-const BankDetails = (props: BankDetailsProps) => {
-    const {
-        onFormSubmit,
-        defaultValues = {},
-        newCustomer = false,
-        children,
-    } = props
-
-    const {
-        handleSubmit,
-        reset,
-        formState: { errors },
-        control,
-    } = useForm<BankDetailsSchema>({
-        defaultValues: {
-            ...{
-                banAccount: false,
-                accountVerified: true,
-            },
-            ...defaultValues,
+    const { data, isLoading, mutate } = useSWR(
+        name ? ['/api/resource/BankDetail', { name }] : null,
+        ([_, params]) => apiGetBankDetails<GetBankDetailResponse, { name: string }>(params),
+        {
+            revalidateOnFocus: false,
+            revalidateIfStale: false,
         },
-        resolver: zodResolver(validationSchema),
-    })
+    )
 
-    useEffect(() => {
-        if (!isEmpty(defaultValues)) {
-            reset(defaultValues)
+    const bankDetailData = data?.data
+
+    const handleFormSubmit = async (values: BankDetailsSchema) => {
+        if (isSubmiting) return;
+        setIsSubmiting(true)
+        // await sleep(800)
+        try {
+            if (name) {
+                await apiUpdateBankDetails(name, values)
+                toast.push(
+                    <Notification type="success">Bank details updated successfully!</Notification>,
+                    { placement: 'top-center' },
+                )
+            } else {
+                const response = await apiCreateBankDetails({
+                    ...values,
+                    employee_number: name
+                })
+                toast.push(<Notification type="success">Bank Details created successfully!</Notification>, {
+                    placement: 'top-center',
+                })
+                navigate('/employee-onboarding')
+            }
+            await mutate()
+        } catch (error) {
+            console.error('Error saving bank details:', error)
+            toast.push(
+                <Notification type="danger">Failed to save bank details!</Notification>,
+                { placement: 'top-center' },
+            )
+        } finally {
+            setIsSubmiting(false)
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [JSON.stringify(defaultValues)])
-
-    const onSubmit = (values: BankDetailsSchema) => {
-        onFormSubmit?.(values)
     }
 
+    const handleConfirmDiscard = () => {
+        setDiscardConfirmationOpen(true)
+        toast.push(
+            <Notification type="success">Bank Details discard!</Notification>,
+            { placement: 'top-center' },
+        )
+        navigate('/employee-onboarding')
+    }
+
+    const handleDiscard = () => {
+        setDiscardConfirmationOpen(true)
+    }
+
+    const handleCancel = () => {
+        setDiscardConfirmationOpen(false)
+    }
+
+    const handleBack = () => {
+        history.back()
+    }
+
+    // const handleSubmitClick = () => {
+    //     if (!isSubmiting && formRef.current) {
+    //         setIsSubmiting(true); // Prevent double submission
+    //         formRef.current.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }));
+    //     }
+    // };
 
     return (
-        <Form
-            className="flex w-full h-full"
-            containerClassName="flex flex-col w-full justify-between"
-        >
-            <Container>
-                <div className="flex items-center justify-between">
-                    <div className="gap-4 flex flex-col flex-auto">
-                        <CorporateBank control={control} errors={errors} />
-                        <ComputeCtc />
+        <>
+            <BankDetailEdit
+                onFormSubmit={handleFormSubmit}
+                defaultValues={bankDetailData}
+            // formRef={formRef}
+            >
+                <Container>
+                    <div className="flex items-center justify-between px-8">
+                        <Button
+                            className="ltr:mr-3 rtl:ml-3"
+                            type="button"
+                            variant="plain"
+                            icon={<TbArrowNarrowLeft />}
+                            onClick={handleBack}
+                        >
+                            Back
+                        </Button>
+                        <div className="flex items-center">
+                            <Button
+                                className="ltr:mr-3 rtl:ml-3"
+                                type="button"
+                                customColorClass={() =>
+                                    'border-error ring-1 ring-error text-error hover:border-error hover:ring-error hover:text-error bg-transparent'
+                                }
+                                icon={<TbTrash />}
+                                onClick={handleDiscard}
+                            >
+                                Discard
+                            </Button>
+                            <Button
+                                variant="solid"
+                                type="submit"
+                                onClick={() => document.getElementById("bankDetailForm")?.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }))}
+                                loading={isSubmiting}
+                            // disabled={isSubmiting}
+                            >
+                                {name ? 'Update' : 'Create'}
+                            </Button>
+                        </div>
                     </div>
-                </div>
-            </Container>
-            <BottomStickyBar>{children}</BottomStickyBar>
-        </Form>
+                </Container>
+            </BankDetailEdit>
+            <ConfirmDialog
+                isOpen={discardConfirmationOpen}
+                type="danger"
+                title="Discard changes"
+                onClose={handleCancel}
+                onRequestClose={handleCancel}
+                onCancel={handleCancel}
+                onConfirm={handleConfirmDiscard}
+            >
+                <p>
+                    Are you sure you want discard this? This action can&apos;t
+                    be undo.{' '}
+                </p>
+            </ConfirmDialog>
+        </>
     )
 }
 
-export default BankDetails   
+export default BankDetails
