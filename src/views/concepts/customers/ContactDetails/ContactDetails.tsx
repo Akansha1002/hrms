@@ -1,101 +1,143 @@
-import { useEffect } from 'react'
-import { Form } from '@/components/ui/Form'
+import { useState } from 'react'
 import Container from '@/components/shared/Container'
-import BottomStickyBar from '@/components/template/BottomStickyBar'
-import isEmpty from 'lodash/isEmpty'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
-import type { ZodType } from 'zod'
-import type { CommonProps } from '@/@types/common'
-import PermanentAddress from './PermanentAddress'
-import { ContactDetailsSchema } from './types'
-import CurrentAddress from './CurrentAddress'
-import UpdatePhone from './UpdatePhone'
+import Button from '@/components/ui/Button'
+import Notification from '@/components/ui/Notification'
+import toast from '@/components/ui/toast'
+import ConfirmDialog from '@/components/shared/ConfirmDialog'
+import { TbArrowNarrowLeft, TbTrash } from 'react-icons/tb'
+import { useNavigate, useParams } from 'react-router-dom'
+import useSWR from 'swr'
+import ContactDetailEdit from './ContactDetailCreate'
+import { apiCreateContactDetails, apiGetContactDetails, apiUpdateContactDetails } from '@/services/ContactDetailsService'
+import { ContactDetailsSchema, GetContactDetailsResponse } from './types'
 
-type ContactDetailsProps = {
-    onFormSubmit: (values: ContactDetailsSchema) => void
-    defaultValues?: ContactDetailsSchema
-    newCustomer?: boolean
-} & CommonProps
 
-const validationSchema: ZodType<ContactDetailsSchema> = z.object({
-    email: z
-        .string()
-        .min(1, { message: 'Email required' })
-        .email({ message: 'Invalid email' }),
-    dialCode: z.string().min(1, { message: 'Please select your country code' }),
-    phoneNumber: z
-        .string()
-        .min(1, { message: 'Please input your mobile number' }),
+const ContactDetails = () => {
+    const navigate = useNavigate()
+    const { name } = useParams()
 
-    dateOfJoin: z.string().min(1, { message: 'Date of join required' }),
-    effectiveFrom: z.string().min(1, { message: 'Effective from required' }),
-    position: z.string().min(1, { message: 'Position required' }),
-    orgStructure: z.string().min(1, { message: 'Organization structure required' }),
+    const [discardConfirmationOpen, setDiscardConfirmationOpen] = useState(false)
+    const [isSubmiting, setIsSubmiting] = useState(false)
 
-    country: z.string().min(1, { message: 'Please select a country' }),
-    address: z.string().min(1, { message: 'Addrress required' }),
-    postcode: z.string().min(1, { message: 'Postcode required' }),
-    city: z.string().min(1, { message: 'City required' }),
-    img: z.string(),
-    tags: z.array(z.object({ value: z.string(), label: z.string() })),
-})
-
-const ContactDetails = (props: ContactDetailsProps) => {
-    const {
-        onFormSubmit,
-        defaultValues = {},
-        newCustomer = false,
-        children,
-    } = props
-
-    const {
-        handleSubmit,
-        reset,
-        formState: { errors },
-        control,
-    } = useForm<ContactDetailsSchema>({
-        defaultValues: {
-            ...{
-                banAccount: false,
-                accountVerified: true,
-            },
-            ...defaultValues,
+    const { data, isLoading, mutate } = useSWR(
+        name ? ['/api/resource/ContactDetails', { name }] : null,
+        ([_, params]) => apiGetContactDetails<GetContactDetailsResponse, { name: string }>(params),
+        {
+            revalidateOnFocus: false,
+            revalidateIfStale: false,
         },
-        resolver: zodResolver(validationSchema),
-    })
+    )
 
-    useEffect(() => {
-        if (!isEmpty(defaultValues)) {
-            reset(defaultValues)
+    const contactData = data?.data
+
+    const handleFormSubmit = async (values: ContactDetailsSchema) => {
+        setIsSubmiting(true)
+        // await sleep(800)
+        try {
+            if (name) {
+                await apiUpdateContactDetails(name, values)
+                toast.push(
+                    <Notification type="success">Contact details updated successfully!</Notification>,
+                    { placement: 'top-center' },
+                )
+            } else {
+                const response = await apiCreateContactDetails(values)
+                toast.push(<Notification type="success">Contact created successfully!</Notification>, {
+                    placement: 'top-center',
+                })
+                navigate('customers/employee-onboarding')
+            }
+            await mutate()
+        } catch (error) {
+            console.error('Error saving contact details:', error)
+            toast.push(
+                <Notification type="danger">Failed to save contact details!</Notification>,
+                { placement: 'top-center' },
+            )
+        } finally {
+
+            setIsSubmiting(false)
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [JSON.stringify(defaultValues)])
-
-    const onSubmit = (values: ContactDetailsSchema) => {
-        onFormSubmit?.(values)
     }
 
+    const handleConfirmDiscard = () => {
+        setDiscardConfirmationOpen(true)
+        toast.push(
+            <Notification type="success">employee Details discard!</Notification>,
+            { placement: 'top-center' },
+        )
+        navigate('customers/employee-onboarding')
+    }
+
+    const handleDiscard = () => {
+        setDiscardConfirmationOpen(true)
+    }
+
+    const handleCancel = () => {
+        setDiscardConfirmationOpen(false)
+    }
+
+    const handleBack = () => {
+        history.back()
+    }
 
     return (
-        <Form
-            className="flex w-full h-full"
-            containerClassName="flex flex-col w-full justify-between"
-            onSubmit={handleSubmit(onSubmit)}
-        >
-            <Container>
-                <div className="flex items-center justify-between">
-                    <div className="gap-4 flex flex-col flex-auto">
-                        <PermanentAddress control={control} errors={errors} />
-                        <CurrentAddress control={control} errors={errors} />
-                        <UpdatePhone control={control} errors={errors} />
+        <>
+            <ContactDetailEdit
+                onFormSubmit={handleFormSubmit}
+                defaultValues={contactData}
+            >
+                <Container>
+                    <div className="flex items-center justify-between px-8">
+                        <Button
+                            className="ltr:mr-3 rtl:ml-3"
+                            type="button"
+                            variant="plain"
+                            icon={<TbArrowNarrowLeft />}
+                            onClick={handleBack}
+                        >
+                            Back
+                        </Button>
+                        <div className="flex items-center">
+                            <Button
+                                className="ltr:mr-3 rtl:ml-3"
+                                type="button"
+                                customColorClass={() =>
+                                    'border-error ring-1 ring-error text-error hover:border-error hover:ring-error hover:text-error bg-transparent'
+                                }
+                                icon={<TbTrash />}
+                                onClick={handleDiscard}
+                            >
+                                Discard
+                            </Button>
+                            <Button
+                                variant="solid"
+                                type="submit"
+                                onClick={() => document.getElementById("contactForm")?.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }))}
+                                loading={isSubmiting}
+                            >
+                                {name ? 'Update' : 'Create'}
+                            </Button>
+                        </div>
                     </div>
-                </div>
-            </Container>
-            <BottomStickyBar>{children}</BottomStickyBar>
-        </Form>
+                </Container>
+            </ContactDetailEdit>
+            <ConfirmDialog
+                isOpen={discardConfirmationOpen}
+                type="danger"
+                title="Discard changes"
+                onClose={handleCancel}
+                onRequestClose={handleCancel}
+                onCancel={handleCancel}
+                onConfirm={handleConfirmDiscard}
+            >
+                <p>
+                    Are you sure you want discard this? This action can&apos;t
+                    be undo.{' '}
+                </p>
+            </ConfirmDialog>
+        </>
     )
 }
 
-export default ContactDetails   
+export default ContactDetails
