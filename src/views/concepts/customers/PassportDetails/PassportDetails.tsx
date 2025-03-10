@@ -1,96 +1,152 @@
-import { useEffect } from 'react'
-import { Form } from '@/components/ui/Form'
+import { useState } from 'react'
 import Container from '@/components/shared/Container'
-import BottomStickyBar from '@/components/template/BottomStickyBar'
-import isEmpty from 'lodash/isEmpty'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
-import type { ZodType } from 'zod'
-import type { CommonProps } from '@/@types/common'
-import { PassportDetailsSchema } from './types'
-import PassportForm from './PassportForm'
+import Button from '@/components/ui/Button'
+import Notification from '@/components/ui/Notification'
+import toast from '@/components/ui/toast'
+import ConfirmDialog from '@/components/shared/ConfirmDialog'
+import { TbArrowNarrowLeft, TbTrash } from 'react-icons/tb'
+import { useNavigate, useParams } from 'react-router-dom'
+import useSWR from 'swr'
+import PassportEdit from './PassportCreate'
+import { GetPassportDetailResponse, PassportDetailsSchema } from './types'
+import { apiCreatePassportDetails, apiGetPassportDetails, apiUpdatePassportDetails } from '@/services/PassportService'
 
-type PassportDetailsProps = {
-    onFormSubmit: (values: PassportDetailsSchema) => void
-    defaultValues?: PassportDetailsSchema
-    newCustomer?: boolean
-} & CommonProps
+const PassportDetails = () => {
+    const navigate = useNavigate()
+    const { name } = useParams()
 
-const validationSchema: ZodType<PassportDetailsSchema> = z.object({
-    email: z
-        .string()
-        .min(1, { message: 'Email required' })
-        .email({ message: 'Invalid email' }),
-    dialCode: z.string().min(1, { message: 'Please select your country code' }),
-    phoneNumber: z
-        .string()
-        .min(1, { message: 'Please input your mobile number' }),
+    const [discardConfirmationOpen, setDiscardConfirmationOpen] = useState(false)
+    const [isSubmiting, setIsSubmiting] = useState(false)
 
-    dateOfJoin: z.string().min(1, { message: 'Date of join required' }),
-    effectiveFrom: z.string().min(1, { message: 'Effective from required' }),
-    position: z.string().min(1, { message: 'Position required' }),
-    orgStructure: z.string().min(1, { message: 'Organization structure required' }),
-
-    country: z.string().min(1, { message: 'Please select a country' }),
-    address: z.string().min(1, { message: 'Addrress required' }),
-    postcode: z.string().min(1, { message: 'Postcode required' }),
-    city: z.string().min(1, { message: 'City required' }),
-    img: z.string(),
-    tags: z.array(z.object({ value: z.string(), label: z.string() })),
-})
-
-const PassportDetails = (props: PassportDetailsProps) => {
-    const {
-        onFormSubmit,
-        defaultValues = {},
-        newCustomer = false,
-        children,
-    } = props
-
-    const {
-        handleSubmit,
-        reset,
-        formState: { errors },
-        control,
-    } = useForm<PassportDetailsSchema>({
-        defaultValues: {
-            ...{
-                banAccount: false,
-                accountVerified: true,
-            },
-            ...defaultValues,
+    const { data, isLoading, mutate } = useSWR(
+        name ? ['/api/resource/Passport', { name }] : null,
+        ([_, params]) => apiGetPassportDetails<GetPassportDetailResponse, { name: string }>(params),
+        {
+            revalidateOnFocus: false,
+            revalidateIfStale: false,
         },
-        resolver: zodResolver(validationSchema),
-    })
+    )
 
-    useEffect(() => {
-        if (!isEmpty(defaultValues)) {
-            reset(defaultValues)
+    const passportData = data?.data
+
+    const handleFormSubmit = async (values: PassportDetailsSchema) => {
+        if (isSubmiting) return;
+        setIsSubmiting(true)
+        // await sleep(800)
+        try {
+            if (name) {
+                await apiUpdatePassportDetails(name, values)
+                toast.push(
+                    <Notification type="success">Passport details updated successfully!</Notification>,
+                    { placement: 'top-center' },
+                )
+            } else {
+                const response = await apiCreatePassportDetails(values)
+                toast.push(<Notification type="success">Passport created successfully!</Notification>, {
+                    placement: 'top-center',
+                })
+                navigate('/employee-onboarding')
+            }
+            await mutate()
+        } catch (error) {
+            console.error('Error saving passport details:', error)
+            toast.push(
+                <Notification type="danger">Failed to save passport details!</Notification>,
+                { placement: 'top-center' },
+            )
+        } finally {
+
+            setIsSubmiting(false)
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [JSON.stringify(defaultValues)])
-
-    const onSubmit = (values: PassportDetailsSchema) => {
-        onFormSubmit?.(values)
     }
 
+    const handleConfirmDiscard = () => {
+        setDiscardConfirmationOpen(true)
+        toast.push(
+            <Notification type="success">Passport Details discard!</Notification>,
+            { placement: 'top-center' },
+        )
+        navigate('/employee-onboarding')
+    }
+
+    const handleDiscard = () => {
+        setDiscardConfirmationOpen(true)
+    }
+
+    const handleCancel = () => {
+        setDiscardConfirmationOpen(false)
+    }
+
+    const handleBack = () => {
+        history.back()
+    }
+
+    // const handleSubmitClick = () => {
+    //     if (!isSubmiting && formRef.current) {
+    //         setIsSubmiting(true); // Prevent double submission
+    //         formRef.current.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }));
+    //     }
+    // };
 
     return (
-        <Form
-            className="flex w-full h-full"
-            containerClassName="flex flex-col w-full justify-between"
-        >
-            <Container>
-                <div className="flex items-center justify-between">
-                    <div className="gap-4 flex flex-col flex-auto">
-                        <PassportForm control={control} errors={errors} />
+        <>
+            <PassportEdit
+                onFormSubmit={handleFormSubmit}
+                defaultValues={passportData}
+                // formRef={formRef}
+            >
+                <Container>
+                    <div className="flex items-center justify-between px-8">
+                    <Button
+                                    className="ltr:mr-3 rtl:ml-3"
+                                    type="button"
+                                    variant="plain"
+                                    icon={<TbArrowNarrowLeft />}
+                                    onClick={handleBack}
+                                >
+                                    Back
+                                </Button>
+                        <div className="flex items-center">
+                            <Button
+                                className="ltr:mr-3 rtl:ml-3"
+                                type="button"
+                                customColorClass={() =>
+                                    'border-error ring-1 ring-error text-error hover:border-error hover:ring-error hover:text-error bg-transparent'
+                                }
+                                icon={<TbTrash />}
+                                onClick={handleDiscard}
+                            >
+                                Discard
+                            </Button>
+                            <Button
+                                variant="solid"
+                                type="submit"
+                                onClick={() => document.getElementById("passportForm")?.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }))}
+                                loading={isSubmiting}
+                                // disabled={isSubmiting}
+                            >
+                                {name ? 'Update' : 'Create'}
+                            </Button>
+                        </div>
                     </div>
-                </div>
-            </Container>
-            <BottomStickyBar>{children}</BottomStickyBar>
-        </Form>
+                </Container>
+            </PassportEdit>
+            <ConfirmDialog
+                isOpen={discardConfirmationOpen}
+                type="danger"
+                title="Discard changes"
+                onClose={handleCancel}
+                onRequestClose={handleCancel}
+                onCancel={handleCancel}
+                onConfirm={handleConfirmDiscard}
+            >
+                <p>
+                    Are you sure you want discard this? This action can&apos;t
+                    be undo.{' '}
+                </p>
+            </ConfirmDialog>
+        </>
     )
 }
 
-export default PassportDetails   
+export default PassportDetails
