@@ -1,4 +1,4 @@
-import FamilyDetails from './FamilyDetails';
+import FamilyDetails from './FamilyDetailForm';
 import type { FamilyDetailsSchema } from './types';
 
 export type { FamilyDetailsSchema };
