@@ -8,25 +8,23 @@ import { apiUpdateEmployeeWorkflowState } from "@/services/CustomersService"
 
 interface EmployeeDetailHeaderProps {
     data: Employee
+    onSave: () => void;
+    hasChanges: boolean;
 }
 
-const EmployeeDetailHeader = ({ data }: EmployeeDetailHeaderProps) => {
-    const { id } = useParams()
+const EmployeeDetailHeader = ({ data, onSave, hasChanges }: EmployeeDetailHeaderProps) => {
+    const { name } = useParams<{ name: string }>()
+    const { mutate } = useSWR("employees");
 
-    const { mutate } = useSWR(null, null, {
-        revalidateOnFocus: false,
-        revalidateIfStale: false,
-    });
+    const handleWorkflowUpdate = async (employeeOnboardingStatus: string) => {
+        if (!name) return;
 
-    const handleWorkflowUpdate = async (workflowState: string) => {
-        if (!id) return;
-        if (workflowState === "Pending HR Manager") {
-            try {
-                await apiUpdateEmployeeWorkflowState(id, workflowState);
-                mutate();
-            } catch (error) {
-                console.error("Error updating workflow state", error);
-            }
+        try {
+
+            await apiUpdateEmployeeWorkflowState(name, employeeOnboardingStatus);
+            mutate();
+        } catch (error) {
+            console.error("Error updating workflow state", error);
         }
     };
 
@@ -37,32 +35,88 @@ const EmployeeDetailHeader = ({ data }: EmployeeDetailHeaderProps) => {
             <div className="flex gap-4">
                 <h3>{data?.employee_name}</h3>
                 <Tag>
-                    <span>{data?.workflow_state}</span>
+                    <span>{data?.employee_onboarding_status}</span>
                 </Tag>
             </div>
-            {data?.workflow_state !== "Onboarded" && (
-                <div>
-                    <Dropdown renderTitle={Toggle}>
-                        {data?.workflow_state === "Pending" && (
-                            <Dropdown.Item
-                                eventKey="a"
-                                onClick={() => handleWorkflowUpdate("Verification from HR Manager")}
-                            >
-                                Send to HR Manager
-                            </Dropdown.Item>
-                        )}
-                        {data?.workflow_state === "Pending Employee End" && (
-                            <Dropdown.Item eventKey="b">Send to HR User</Dropdown.Item>
-                        )}
-                        {data?.workflow_state === "Verification from HR Manager" && (
-                            <>
-                                <Dropdown.Item eventKey="c">Approve</Dropdown.Item>
-                                <Dropdown.Item eventKey="d">Reject</Dropdown.Item>
-                            </>
-                        )}
-                        <Dropdown.Item eventKey="b">Help</Dropdown.Item>
-                    </Dropdown>
-                </div>
+            {hasChanges ? (
+                <Button
+                    variant="solid"
+                    onClick={onSave}
+                >
+                    Save
+                </Button>
+            ) : (
+                data?.employee_onboarding_status !== "Onboarded" && (
+                    <div>
+                        <Dropdown renderTitle={Toggle}>
+                            {data?.employee_onboarding_status === "Pending" && (
+                                <Dropdown.Item
+                                    eventKey="a"
+                                    onClick={() => handleWorkflowUpdate("Verification from HR Manager")}
+                                >
+                                    Send to HR Manager
+                                </Dropdown.Item>
+                            )}
+                            {data?.employee_onboarding_status === "Verification from HR Manager" && (
+                                <>
+                                    <Dropdown.Item
+                                        eventKey="c"
+                                        onClick={() => handleWorkflowUpdate("Pending Employee End")}
+                                    >
+                                        Approve
+                                    </Dropdown.Item>
+                                    <Dropdown.Item
+                                        eventKey="d"
+                                        onClick={() => handleWorkflowUpdate("Pending")}
+                                    >
+                                        Reject
+                                    </Dropdown.Item>
+                                </>
+                            )}
+                            {data?.employee_onboarding_status === "Pending Employee End" && (
+                                <Dropdown.Item
+                                    eventKey="b"
+                                    onClick={() => handleWorkflowUpdate("Verification by HR")}
+                                >
+                                    Send to HR User
+                                </Dropdown.Item>
+                            )}
+                            {data?.employee_onboarding_status === "Verification by HR" && (
+                                <>
+                                    <Dropdown.Item
+                                        eventKey="c"
+                                        onClick={() => handleWorkflowUpdate("Approved")}
+                                    >
+                                        Approve
+                                    </Dropdown.Item>
+                                    <Dropdown.Item
+                                        eventKey="d"
+                                        onClick={() => handleWorkflowUpdate("Pending Employee End")}
+                                    >
+                                        Reject
+                                    </Dropdown.Item>
+                                </>
+                            )}
+                            {data?.employee_onboarding_status === "Approved" && (
+                                <>
+                                    <Dropdown.Item
+                                        eventKey="c"
+                                        onClick={() => handleWorkflowUpdate("Onboarded")}
+                                    >
+                                        Approve
+                                    </Dropdown.Item>
+                                    <Dropdown.Item
+                                        eventKey="d"
+                                        onClick={() => handleWorkflowUpdate("Verification by HR")}
+                                    >
+                                        Reject
+                                    </Dropdown.Item>
+                                </>
+                            )}
+                            <Dropdown.Item eventKey="b">Help</Dropdown.Item>
+                        </Dropdown>
+                    </div>
+                )
             )}
         </div>
     )
