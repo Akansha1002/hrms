@@ -9,42 +9,36 @@ import { z } from 'zod'
 import type { ZodType } from 'zod'
 import type { CommonProps } from '@/@types/common'
 import { PastEmploymentDetailsSchema } from './types'
-import EmploymentDetails from './EmploymentDetailSection'
-
+import EmploymentDetails from './components/EmploymentDetailSection'
 type PastEmploymentDetailsProps = {
     onFormSubmit: (values: PastEmploymentDetailsSchema) => void
     defaultValues?: PastEmploymentDetailsSchema
-    newCustomer?: boolean
 } & CommonProps
 
 const validationSchema: ZodType<PastEmploymentDetailsSchema> = z.object({
-    email: z
-        .string()
-        .min(1, { message: 'Email required' })
-        .email({ message: 'Invalid email' }),
-    dialCode: z.string().min(1, { message: 'Please select your country code' }),
-    phoneNumber: z
-        .string()
-        .min(1, { message: 'Please input your mobile number' }),
-
-    dateOfJoin: z.string().min(1, { message: 'Date of join required' }),
-    effectiveFrom: z.string().min(1, { message: 'Effective from required' }),
-    position: z.string().min(1, { message: 'Position required' }),
-    orgStructure: z.string().min(1, { message: 'Organization structure required' }),
-
-    country: z.string().min(1, { message: 'Please select a country' }),
-    address: z.string().min(1, { message: 'Addrress required' }),
-    postcode: z.string().min(1, { message: 'Postcode required' }),
-    city: z.string().min(1, { message: 'City required' }),
-    img: z.string(),
-    tags: z.array(z.object({ value: z.string(), label: z.string() })),
+    employee_number: z.string().optional(),
+    company_name: z.string().min(1, { message: "Company name required" }),
+    from_date: z.string().min(1, { message: "Start date required" }),
+    to_date: z.string().min(1, { message: "End date required" }),
+    job_title: z.string().min(1, { message: "Job title required" }),
+    salary_on_leaving: z.string().optional(),
+    contact_number: z.string().optional(),
+    roles: z.string().optional(),
+    breaks_in_career: z.string().optional(),
+    address: z.string().optional(),
+    designation_on_joining: z.string().optional(),
+    designation_on_leaving: z.string().optional(),
+    number_of_people_reporting: z.string().optional(),
+    industry_type: z.string().optional(),
+    key_experience: z.string().optional(),
+    reason_for_leaving: z.string().optional(),
+    number_of_months_experience: z.string().optional(),
 })
 
-const PastEmploymentDetails = (props: PastEmploymentDetailsProps) => {
+const PastEmploymentDetailForm = (props: PastEmploymentDetailsProps) => {
     const {
         onFormSubmit,
         defaultValues = {},
-        newCustomer = false,
         children,
     } = props
 
@@ -54,13 +48,7 @@ const PastEmploymentDetails = (props: PastEmploymentDetailsProps) => {
         formState: { errors },
         control,
     } = useForm<PastEmploymentDetailsSchema>({
-        defaultValues: {
-            ...{
-                banAccount: false,
-                accountVerified: true,
-            },
-            ...defaultValues,
-        },
+        defaultValues,
         resolver: zodResolver(validationSchema),
     })
 
@@ -80,11 +68,12 @@ const PastEmploymentDetails = (props: PastEmploymentDetailsProps) => {
         <Form
             className="flex w-full h-full"
             containerClassName="flex flex-col w-full justify-between"
+            onSubmit={handleSubmit(onSubmit)}
         >
             <Container>
                 <div className="flex items-center justify-between">
                     <div className="gap-4 flex flex-col flex-auto">
-                        <EmploymentDetails control={control} errors={errors} />
+                        <EmploymentDetails control={control} errors={errors} data={defaultValues} />
                     </div>
                 </div>
             </Container>
@@ -93,4 +82,4 @@ const PastEmploymentDetails = (props: PastEmploymentDetailsProps) => {
     )
 }
 
-export default PastEmploymentDetails   
+export default PastEmploymentDetailForm  
