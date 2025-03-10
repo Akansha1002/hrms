@@ -10,14 +10,24 @@ import { Employee } from '../../EmployeeList/types'
 
 interface PayrollSectionProps {
     data: Employee
+    onChange: () => void;
+    setUpdatedValues: (callback: (prev: Partial<Employee>) => Partial<Employee>) => void;
 }
 
-const PayRollSection = () => {
+const PayRollSection = ({ data, onChange, setUpdatedValues }: PayrollSectionProps) => {
     const [drawerOpen, setDrawerOpen] = useState(false)
 
     const handleOnClick = () => {
         setDrawerOpen(true);
     }
+
+    const handleInputChange = (field: keyof Employee, value: string | number) => {
+        setUpdatedValues((prev) => ({
+            ...prev,
+            [field]: value,
+        }));
+        onChange();
+    };
 
     return (
         <>
@@ -29,6 +39,8 @@ const PayRollSection = () => {
                     >
                         <Input
                             type="text"
+                            defaultValue={data?.pan_number || ''}
+                            onChange={(e) => handleInputChange("pan_number", e.target.value)}
                         />
                     </FormItem>
                     <div className="flex items-center justify-between gap-8">
@@ -65,6 +77,8 @@ const PayRollSection = () => {
                         >
                             <Input
                                 type="text"
+                                defaultValue={data?.custom_pf_number || ''}
+                                onChange={(e) => handleInputChange("custom_pf_number", e.target.value)}
                             />
                         </FormItem>
                     </div>
@@ -102,6 +116,8 @@ const PayRollSection = () => {
                         >
                             <Input
                                 type="text"
+                                defaultValue={data?.custom_esi_number || ''}
+                                onChange={(e) => handleInputChange("custom_esi_number", e.target.value)}
                             />
                         </FormItem>
 
@@ -140,6 +156,8 @@ const PayRollSection = () => {
                         >
                             <Input
                                 type="text"
+                                defaultValue={data?.custom_pt_location || ''}
+                                onChange={(e) => handleInputChange("custom_pt_location", e.target.value)}
                             />
                         </FormItem>
                     </div>
@@ -148,6 +166,8 @@ const PayRollSection = () => {
                     >
                         <Input
                             type="text"
+                            defaultValue={data?.custom_gl_code || ''}
+                            onChange={(e) => handleInputChange("custom_gl_code", e.target.value)}
                         />
                     </FormItem>
                     <FormItem
@@ -155,6 +175,8 @@ const PayRollSection = () => {
                     >
                         <Input
                             type="text"
+                            defaultValue={data?.salary_mode || ''}
+                            onChange={(e) => handleInputChange("salary_mode", e.target.value)}
                         />
                     </FormItem>
                     <FormItem
@@ -162,6 +184,8 @@ const PayRollSection = () => {
                     >
                         <Input
                             type="text"
+                            defaultValue={data?.custom_applied_from || ''}
+                            onChange={(e) => handleInputChange("custom_applied_from", e.target.value)}
                         />
                     </FormItem>
                     <FormItem
@@ -169,6 +193,8 @@ const PayRollSection = () => {
                     >
                         <Input
                             type="text"
+                            defaultValue={data?.custom_pay_group || ''}
+                            onChange={(e) => handleInputChange("custom_pay_group", e.target.value)}
                         />
                     </FormItem>
                     <FormItem className="inline-flex flex-wrap xl:flex gap-2">

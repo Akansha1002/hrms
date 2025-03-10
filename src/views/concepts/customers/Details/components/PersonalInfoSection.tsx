@@ -8,6 +8,8 @@ import { Employee } from '../../EmployeeList/types'
 
 interface PersonalInfoSectionProps {
     data: Employee
+    onChange: () => void;
+    setUpdatedValues: (callback: (prev: Partial<Employee>) => Partial<Employee>) => void;
 }
 
 const salutationOptions = [
@@ -21,7 +23,23 @@ const genderOptions = [
     { value: 'Female', label: 'Female' },
 ]
 
-const PersonalInfoSection = ({ data }: PersonalInfoSectionProps) => {
+const PersonalInfoSection = ({ data, onChange, setUpdatedValues }: PersonalInfoSectionProps) => {
+
+    // const handleInputChange = (field: string, value: string | number) => {
+    //     setUpdatedValues((prev) => ({
+    //         ...prev,
+    //         [field]: value,
+    //     }));
+    //     onChange();
+    // };
+
+    const handleInputChange = (field: keyof Employee, value: string | number) => {
+        setUpdatedValues((prev) => ({
+            ...prev,
+            [field]: value,
+        }));
+        onChange();
+    };
 
     return (
         <Card>
@@ -34,9 +52,10 @@ const PersonalInfoSection = ({ data }: PersonalInfoSectionProps) => {
                         placeholder="Employee Number"
                         autoComplete="off"
                         defaultValue={data?.name}
+                        onChange={(e) => handleInputChange("name", e.target.value)}
                     />
                 </FormItem>
-                <FormItem
+                {/* <FormItem
                     label="Login ID"
                 >
                     <NumericInput
@@ -44,13 +63,14 @@ const PersonalInfoSection = ({ data }: PersonalInfoSectionProps) => {
                         placeholder="Login ID"
                         defaultValue={data?.login_id}
                     />
-                </FormItem>
+                </FormItem> */}
                 <FormItem
                     label="Salutation"
                 >
                     <Select
                         options={salutationOptions}
                         defaultValue={salutationOptions.find(option => option.value === data?.salutation)}
+                        onChange={(option) => handleInputChange("salutation", option?.value || '')}
                     />
                 </FormItem>
                 <FormItem
@@ -61,6 +81,7 @@ const PersonalInfoSection = ({ data }: PersonalInfoSectionProps) => {
                         autoComplete="off"
                         placeholder="First Name"
                         defaultValue={data?.first_name}
+                        onChange={(e) => handleInputChange("first_name", e.target.value)}
                     />
                 </FormItem>
                 <FormItem
@@ -71,6 +92,7 @@ const PersonalInfoSection = ({ data }: PersonalInfoSectionProps) => {
                         autoComplete="off"
                         placeholder="Middle Name"
                         defaultValue={data?.middle_name}
+                        onChange={(e) => handleInputChange("middle_name", e.target.value)}
                     />
                 </FormItem>
                 <FormItem
@@ -81,6 +103,7 @@ const PersonalInfoSection = ({ data }: PersonalInfoSectionProps) => {
                         autoComplete="off"
                         placeholder="Last Name"
                         defaultValue={data?.last_name}
+                        onChange={(e) => handleInputChange("last_name", e.target.value)}
                     />
                 </FormItem>
                 <FormItem
@@ -89,6 +112,7 @@ const PersonalInfoSection = ({ data }: PersonalInfoSectionProps) => {
                     <Input
                         type="date"
                         defaultValue={data?.date_of_birth}
+                        onChange={(e) => handleInputChange("date_of_birth", e.target.value)}
                     />
                 </FormItem>
                 <FormItem
@@ -97,6 +121,7 @@ const PersonalInfoSection = ({ data }: PersonalInfoSectionProps) => {
                     <Select
                         options={genderOptions}
                         defaultValue={genderOptions.find(option => option.value === data?.gender)}
+                        onChange={(option) => handleInputChange("gender", option?.value || '')}
                     />
                 </FormItem>
             </div>

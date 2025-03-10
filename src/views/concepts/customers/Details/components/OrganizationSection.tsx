@@ -6,6 +6,8 @@ import { Employee } from '../../EmployeeList/types'
 
 interface OrganizationSectionProps {
     data: Employee
+    onChange: () => void;
+    setUpdatedValues: (callback: (prev: Partial<Employee>) => Partial<Employee>) => void;
 }
 
 const positionOptions = [
@@ -56,7 +58,16 @@ const gradeOptions = [
     { value: 'seniorManagement', label: 'Senior Management' }
 ];
 
-const OrganizationSection = ({ data }: OrganizationSectionProps) => {
+const OrganizationSection = ({ data, onChange, setUpdatedValues }: OrganizationSectionProps) => {
+
+    const handleInputChange = (field: keyof Employee, value: string | number) => {
+        setUpdatedValues((prev) => ({
+            ...prev,
+            [field]: value,
+        }));
+        onChange();
+    };
+
     return (
         <Card>
             <h4 className="mb-6">Organization</h4>
@@ -67,6 +78,7 @@ const OrganizationSection = ({ data }: OrganizationSectionProps) => {
                     <Input
                         type="date"
                         defaultValue={data?.date_of_joining}
+                        onChange={(e) => handleInputChange("date_of_joining", e.target.value)}
                     />
                 </FormItem>
                 <FormItem
@@ -95,6 +107,8 @@ const OrganizationSection = ({ data }: OrganizationSectionProps) => {
                 >
                     <Select
                         options={locationOptions}
+                        defaultValue={locationOptions.find(option => option.value === data?.custom_location)}
+                        onChange={(option) => handleInputChange("custom_location", option?.value || '')}
                     />
                 </FormItem>
                 <FormItem
@@ -102,6 +116,8 @@ const OrganizationSection = ({ data }: OrganizationSectionProps) => {
                 >
                     <Select
                         options={departmentOptions}
+                        defaultValue={departmentOptions.find(option => option.value === data?.department)}
+                        onChange={(option) => handleInputChange("department", option?.value || '')}
                     />
                 </FormItem>
                 <FormItem
@@ -109,6 +125,8 @@ const OrganizationSection = ({ data }: OrganizationSectionProps) => {
                 >
                     <Select
                         options={designationOptions}
+                        defaultValue={designationOptions.find(option => option.value === data?.designation)}
+                        onChange={(option) => handleInputChange("designation", option?.value || '')}
                     />
                 </FormItem>
                 <FormItem
@@ -116,6 +134,8 @@ const OrganizationSection = ({ data }: OrganizationSectionProps) => {
                 >
                     <Select
                         options={gradeOptions}
+                        defaultValue={gradeOptions.find(option => option.value === data?.grade)}
+                        onChange={(option) => handleInputChange("grade", option?.value || '')}
                     />
                 </FormItem>
                 <FormItem
@@ -123,6 +143,8 @@ const OrganizationSection = ({ data }: OrganizationSectionProps) => {
                 >
                     <Input
                         type="text"
+                        defaultValue={data?.payroll_cost_center || ''}
+                        onChange={(e) => handleInputChange("payroll_cost_center", e.target.value)}
                     />
                 </FormItem>
                 <FormItem
@@ -137,6 +159,8 @@ const OrganizationSection = ({ data }: OrganizationSectionProps) => {
                 >
                     <Input
                         type="text"
+                        defaultValue={data?.custom_reporting_manager || ''}
+                        onChange={(e) => handleInputChange("custom_reporting_manager", e.target.value)}
                     />
                 </FormItem>
                 <FormItem
@@ -144,20 +168,17 @@ const OrganizationSection = ({ data }: OrganizationSectionProps) => {
                 >
                     <Input
                         type="text"
+                        defaultValue={data?.custom_functional_manager || ''}
+                        onChange={(e) => handleInputChange("custom_functional_manager", e.target.value)}
                     />
                 </FormItem>
                 <FormItem
-                    label="Action"
+                    label="People Manager"
                 >
                     <Input
                         type="text"
-                    />
-                </FormItem>
-                <FormItem
-                    label="Action Reason"
-                >
-                    <Input
-                        type="text"
+                        defaultValue={data?.custom_peoples_manager || ''}
+                        onChange={(e) => handleInputChange("custom_peoples_manager", e.target.value)}
                     />
                 </FormItem>
             </div>

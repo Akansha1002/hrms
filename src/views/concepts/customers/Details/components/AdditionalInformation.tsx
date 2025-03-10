@@ -8,6 +8,8 @@ import { Employee } from '../../EmployeeList/types'
 
 interface AdditionalInfoSectionProps {
     data: Employee
+    onChange: () => void;
+    setUpdatedValues: (callback: (prev: Partial<Employee>) => Partial<Employee>) => void;
 }
 
 const calendarOptions = [
@@ -55,7 +57,16 @@ const employmentTypeOptions = [
 
 
 
-const AdditionalInformation = () => {
+const AdditionalInformation = ({ data, onChange, setUpdatedValues }: AdditionalInfoSectionProps) => {
+
+    const handleInputChange = (field: keyof Employee, value: string | number) => {
+        setUpdatedValues((prev) => ({
+            ...prev,
+            [field]: value,
+        }));
+        onChange();
+    };
+
     return (
         <Card>
             <h4 className="mb-6">Additional Information </h4>
@@ -72,6 +83,8 @@ const AdditionalInformation = () => {
                 >
                     <Select
                         options={attendanceOptions}
+                        defaultValue={attendanceOptions.find(option => option.value === data?.custom_attendance)}
+                        onChange={(option) => handleInputChange("custom_attendance", option?.value || '')}
                     />
                 </FormItem>
                 <FormItem
@@ -79,6 +92,8 @@ const AdditionalInformation = () => {
                 >
                     <Select
                         options={shiftTypeOptions}
+                        defaultValue={shiftTypeOptions.find(option => option.value === data?.custom_shift_type)}
+                        onChange={(option) => handleInputChange("custom_shift_type", option?.value || '')}
                     />
                 </FormItem>
                 <FormItem
@@ -86,6 +101,8 @@ const AdditionalInformation = () => {
                 >
                     <Select
                         options={shiftGroupOptions}
+                        defaultValue={shiftGroupOptions.find(option => option.value === data?.custom_shift_group)}
+                        onChange={(option) => handleInputChange("custom_shift_group", option?.value || '')}
                     />
                 </FormItem>
                 <FormItem
@@ -93,6 +110,8 @@ const AdditionalInformation = () => {
                 >
                     <Select
                         options={employmentStatusOptions}
+                        defaultValue={employmentStatusOptions.find(option => option.value === data?.custom_employment_status)}
+                        onChange={(option) => handleInputChange("custom_employment_status", option?.value || '')}
                     />
                 </FormItem>
                 <FormItem
@@ -100,6 +119,8 @@ const AdditionalInformation = () => {
                 >
                     <Input
                         type="date"
+                        defaultValue={data?.final_confirmation_date || ''}
+                        onChange={(e) => handleInputChange("final_confirmation_date", e.target.value)}
                     />
                 </FormItem>
                 <FormItem
@@ -107,6 +128,8 @@ const AdditionalInformation = () => {
                 >
                     <Select
                         options={employmentTypeOptions}
+                        defaultValue={employmentTypeOptions.find(option => option.value === data?.custom_full_part_time)}
+                        onChange={(option) => handleInputChange("custom_full_part_time", option?.value || '')}
                     />
                 </FormItem>
                 <FormItem
@@ -114,6 +137,8 @@ const AdditionalInformation = () => {
                 >
                     <Input
                         type="text"
+                        defaultValue={data?.custom_contract_type || ''}
+                        onChange={(e) => handleInputChange("custom_contract_type", e.target.value)}
                     />
                 </FormItem>
                 <FormItem
@@ -121,6 +146,8 @@ const AdditionalInformation = () => {
                 >
                     <Input
                         type="date"
+                        defaultValue={data?.contract_end_date || ''}
+                        onChange={(e) => handleInputChange("contract_end_date", e.target.value)}
                     />
                 </FormItem>
                 <FormItem
@@ -128,6 +155,8 @@ const AdditionalInformation = () => {
                 >
                     <Input
                         type="text"
+                        defaultValue={data?.custom_contractor || ''}
+                        onChange={(e) => handleInputChange("custom_contractor", e.target.value)}
                     />
                 </FormItem>
                 <FormItem
@@ -135,6 +164,8 @@ const AdditionalInformation = () => {
                 >
                     <Input
                         type="text"
+                        defaultValue={data?.custom_experience_in_category || ''}
+                        onChange={(e) => handleInputChange("custom_experience_in_category", e.target.value)}
                     />
                 </FormItem>
                 <FormItem
@@ -142,6 +173,8 @@ const AdditionalInformation = () => {
                 >
                     <Input
                         type="number"
+                        defaultValue={data?.custom_experience_in_months || ''}
+                        onChange={(e) => handleInputChange("custom_experience_in_months", e.target.value)}
                     />
                 </FormItem>
                 <FormItem
@@ -149,6 +182,8 @@ const AdditionalInformation = () => {
                 >
                     <Input
                         type="number"
+                        defaultValue={data?.notice_number_of_days || ''}
+                        onChange={(e) => handleInputChange("notice_number_of_days", e.target.value)}
                     />
                 </FormItem>
                 <FormItem
@@ -156,6 +191,8 @@ const AdditionalInformation = () => {
                 >
                     <Input
                         type="text"
+                        defaultValue={data?.custom_secretary || ''}
+                        onChange={(e) => handleInputChange("custom_secretary", e.target.value)}
                     />
                 </FormItem>
                 <div className="flex items-center justify-between gap-8">
@@ -192,6 +229,8 @@ const AdditionalInformation = () => {
                     >
                         <Input
                             type="text"
+                            defaultValue={data?.custom_old_employee_number || ''}
+                            onChange={(e) => handleInputChange("custom_old_employee_number", e.target.value)}
                         />
                     </FormItem>
                 </div>
